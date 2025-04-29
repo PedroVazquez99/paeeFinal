@@ -81,11 +81,13 @@ namespace TPVproyecto.ViewModels.VentanasVM
         // Funciones Aceptar
         private void EjecutarAceptar(object parameter)
         {
-            if(MesaSeleccionada != null)
+            Console.Write(parameter);
+            if(MesaSeleccionada != null && MesaSeleccionada.IsActivo == false)
             {
                 try
                 {
                     _heladoService.guardarHelado(_heladosList, MesaSeleccionada);
+                    _mesaService.cambiarEstadoMesa(MesaSeleccionada.Id, true);
                 }
                 catch (Exception ex) {
                     MessageBox.Show("No se pudo guardar la cuenta correctamente");

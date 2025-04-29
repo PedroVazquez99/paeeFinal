@@ -28,11 +28,23 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <!-- Plantilla para cada elemento del array -->
-                    <Border BorderBrush="Gray" BorderThickness="2" Margin="5" Padding="10" CornerRadius="10">
+                    <Border BorderThickness="2" Margin="5" CornerRadius="10">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="Green"/>
+                                <!-- Fondo verde por defecto -->
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsActivo}" Value="True">
+                                        <Setter Property="Background" Value="#ea4f4f"/>
+                                        <!-- Fondo rojo si IsActivo es true -->
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
                         <Button Content="{Binding NombreMesa}" 
-                                FontSize="20" Background="Transparent" BorderThickness="0" 
-                                Command="{Binding DataContext.MiComando, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}"/>
+                        FontSize="20" Background="Transparent" BorderThickness="0" 
+                        Command="{Binding DataContext.MiComando, RelativeSource={RelativeSource AncestorType=Window}}"
+                        CommandParameter="{Binding}" />
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

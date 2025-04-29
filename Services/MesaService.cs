@@ -53,5 +53,39 @@ namespace TPVproyecto.Services
             
         }
 
+        public void cambiarEstadoMesa(int idMesa, bool nuevoEstado)
+        {
+            try
+            {
+                connection.Open();
+                string query = "UPDATE Mesa SET isActivo = @nuevoEstado WHERE id = @idMesa";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@nuevoEstado", nuevoEstado);
+                    command.Parameters.AddWithValue("@idMesa", idMesa);
+
+                    int filasAfectadas = command.ExecuteNonQuery(); // Ejecuta la actualización
+
+                    if (filasAfectadas > 0)
+                    {
+                        Console.WriteLine($"Mesa con Id {idMesa} actualizada a IsActivo = {nuevoEstado}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No se encontró la mesa para actualizar.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al cambiar el estado de la mesa: " + ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
     }
 }
