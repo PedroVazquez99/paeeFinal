@@ -37,7 +37,10 @@
 
 
                         <Button Content="Detalles" Margin="5" />
-                        <Button Content="Borrar" Margin="5"/>
+                        <Button Content="Borrar"
+                        Command="{Binding DataContext.BorrarHeladoCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"
+                        Margin="5" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

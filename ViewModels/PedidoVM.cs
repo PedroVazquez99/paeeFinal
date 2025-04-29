@@ -12,6 +12,8 @@ namespace TPVproyecto.ViewModels
 {
     public class PedidoVM : BaseVM
     {
+
+        
         // Total cuenta
         private decimal _total = 0.00m;
         public decimal Total
@@ -42,13 +44,21 @@ namespace TPVproyecto.ViewModels
         }
 
         // Commands
-        public ICommand PagarCommand { get; }
+        public ICommand BorrarHeladoCommand { get; }
+        public ICommand PagarCommand { get; } 
+
         private InicioVM _mainViewModel;
 
         public PedidoVM(InicioVM mainViewModel)
         {
             _mainViewModel = mainViewModel;
-            
+
+            // Inicializa el comando de borrar, pasando el índice como parámetro
+            BorrarHeladoCommand = new RelayCommand(
+                parameter => borrarHeladoPedido(Convert.ToInt32(parameter))
+            );
+
+
             PagarCommand = new PagarCommand(_mainViewModel.helados);
 
             _helados.CollectionChanged += (s, e) =>
@@ -86,6 +96,17 @@ namespace TPVproyecto.ViewModels
             //helados.Add(helado);
             //helados.Add(helado);
         }
+
+        public void borrarHeladoPedido(int index)
+        {
+            // Validar que el índice sea válido antes de eliminar
+            if (index >= 0 && index < _helados.Count)
+            {
+                _helados.RemoveAt(index);
+                OnPropertyChanged(nameof(Total)); // Actualiza el total después de eliminar
+            }
+        }
+
 
     }
 
