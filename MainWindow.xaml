@@ -1,0 +1,31 @@
+﻿<Window x:Class="TPVproyecto.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TPVproyecto"
+        mc:Ignorable="d"
+        Title="Heladeria TPV" Height="600" Width="1200"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:viewmodels="clr-namespace:TPVproyecto.ViewModels"
+        xmlns:views="clr-namespace:TPVproyecto.Views"
+        xmlns:viewmodelsAdmin="clr-namespace:TPVproyecto.ViewModels.Admin"
+        xmlns:viewsAdmin="clr-namespace:TPVproyecto.Views.Paginas"
+        xmlns:viewmodelsPagPedidos="clr-namespace:TPVproyecto.ViewModels.PagPedidos">
+
+    <ContentControl Content="{Binding CurrentViewModel}">
+        <ContentControl.Resources>
+            <DataTemplate DataType="{x:Type viewmodels:InicioVM}">
+                <views:InicioUC />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodelsAdmin:AdminVM}">
+                <viewsAdmin:AdminMainUC />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodelsPagPedidos:PedidosVM}">
+                <viewsAdmin:PedidoMainUC />
+            </DataTemplate>
+        </ContentControl.Resources>
+    </ContentControl>
+
+</Window>
+<!--<Button Command="{Binding SubmitCommand}" Content="Button" HorizontalAlignment="Center" Margin="0,252,0,0" VerticalAlignment="Top" Width="244"/>-->

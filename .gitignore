@@ -1,0 +1,44 @@
+# Archivos temporales de Visual Studio
+.vs/
+*.vscode/
+
+# Archivos de compilación
+*.obj
+*.exe
+*.dll
+*.pdb
+*.log
+*.cache
+*.ilk
+*.idb
+
+# Carpetas generadas por MSBuild
+bin/
+obj/
+
+# Paquetes NuGet
+*.nupkg
+packages/
+project.lock.json
+
+# Carpetas temporales para herramientas
+_Temp/
+_ReSharper/
+
+# Archivos de configuración locales
+*.user
+*.suo
+*.psess
+*.csproj.user
+*.sln.docstates
+
+# Archivos de configuración específicos de Visual Studio
+.vscode/settings.json
+.vscode/tasks.json
+
+# Otros
+*.vspscc
+*.vssscc
+*.bak
+Thumbs.db
+ehthumbs.db

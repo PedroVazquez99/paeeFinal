@@ -1,0 +1,56 @@
+﻿<Application x:Class="TPVproyecto.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TPVproyecto"
+             xmlns:vm="clr-namespace:TPVproyecto.ViewModels"
+             xmlns:views="clr-namespace:TPVproyecto.Views.Elegir"
+             xmlns:viewsAdmin="clr-namespace:TPVproyecto.Views.Paginas.Admin"
+             xmlns:vmAdmin="clr-namespace:TPVproyecto.ViewModels.Admin"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+            <!--StartupUri="MainWindow.xaml" Linea comentada, se abren dos pestañas Main -->
+
+    <Application.Resources>
+        <!-- DataTemplate para UserControl1 -->
+        <DataTemplate DataType="{x:Type vm:ElegirTipoVM}">
+            <views:TipoUC />
+        </DataTemplate>
+
+        <!-- DataTemplate para UserControl2 -->
+        <DataTemplate DataType="{x:Type vm:ElegirTamanyoVM}">
+            <views:TamanyoUC />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:ElegirSaborVM}">
+            <views:SaborUC />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:ElegirToppingVM}">
+            <views:ToppingUC />
+        </DataTemplate>
+
+        
+        
+        <ResourceDictionary x:Key="MaterialDesignThemes">
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
+
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+
+        <!--<DataTemplate DataType="{x:Type vm:ElegirToppingVM}">
+            <views:TamanyoUC />
+        </DataTemplate>-->
+
+        <!--<DataTemplate DataType="{x:Type vmAdmin:TipoHAdminVM}">
+            <viewsAdmin:TipoHAdminUC />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmAdmin:TamanyoHAdminVM}">
+            <viewsAdmin:TamanyoHAdminUC/>
+        </DataTemplate>-->
+
+    </Application.Resources>
+</Application>

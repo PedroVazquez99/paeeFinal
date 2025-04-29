@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vmodel="clr-namespace:TPVproyecto.ViewModels.Admin"
+                    xmlns:view="clr-namespace:TPVproyecto.Views.Paginas.Admin">
+
+    <DataTemplate DataType="{x:Type vmodel:TipoHAdminVM}">
+        <view:TipoHAdminUC />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vmodel:TamanyoHAdminVM}">
+        <view:TamanyoHAdminUC />
+    </DataTemplate>
+
+</ResourceDictionary>

@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="TPVproyecto.Views.Paginas.Admin.TamanyoHAdminUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TPVproyecto.Views.Paginas.Admin"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:vm="clr-namespace:TPVproyecto.ViewModels.Admin">
+    
+    <!--<UserControl.DataContext>
+        <vm:TamanyoHAdminVM></vm:TamanyoHAdminVM>
+    </UserControl.DataContext>-->
+    <Grid>
+        <StackPanel>
+            <!-- Iterar sobre la lista de tipos y crear un botón por cada tipo -->
+            <ItemsControl ItemsSource="{Binding Tamanyos}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding NombreTamanyo}" 
+                        Command="{Binding DataContext.ModalEditarCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                        CommandParameter="{Binding}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Grid>
+</UserControl>

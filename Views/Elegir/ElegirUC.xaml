@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="TPVproyecto.Views.Elegir.ElegirUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TPVproyecto"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="300" Background="#FF12607B">
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <ContentControl Content="{Binding CurrentViewModel}"/>
+        <Button Content="Aceptar" Command="{Binding AceptarElegir}"
+                Grid.Row="1" Width="Auto" Padding="20, 10"
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Right"
+                Margin="0,0,10,0"></Button>
+    </Grid>
+</UserControl>

@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="TPVproyecto.Views.Paginas.AdminMainUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TPVproyecto.Views.Paginas"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Background="#FFD67D7D"
+             Style="{DynamicResource Page_Style}">
+
+    <!--VIEWMODEL: InicioVM-->
+
+    <!--Recurso para cargar las distintas vistas asociadas a su VIewModel-->
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Styles/DatatemplateAdmin.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="6*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Button Grid.Row="1" Content="Tipos" Command="{Binding TipoCommand}"></Button>
+        <Button Grid.Row="2" Content="Tamaños" Command="{Binding TamanyoCommand}"></Button>
+        <Button Grid.Row="3" Content="Sabores" Command="{Binding SaborCommand}"></Button>
+        <Button Grid.Row="4" Content="Toppinggs" Command="{Binding ToppingCommand}"></Button>
+        
+        <ContentControl x:Name="Pages"
+                        Content="{Binding CurrentViewAdmin}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4"/>
+
+
+    </Grid>
+</UserControl>
