@@ -49,12 +49,14 @@ namespace TPVproyecto.Services
                 }
             }
             _mesasList = mesas;
+            connection.Close();
             return _mesasList;
             
         }
 
         public void cambiarEstadoMesa(int idMesa, bool nuevoEstado)
         {
+            Console.WriteLine(idMesa.ToString(), nuevoEstado);
             try
             {
                 connection.Open();
@@ -76,14 +78,11 @@ namespace TPVproyecto.Services
                         Console.WriteLine("No se encontró la mesa para actualizar.");
                     }
                 }
+                connection.Close();
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error al cambiar el estado de la mesa: " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
             }
         }
 

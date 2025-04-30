@@ -86,8 +86,13 @@ namespace TPVproyecto.ViewModels.VentanasVM
             {
                 try
                 {
+                    bool isMesaActivo = true;
                     _heladoService.guardarHelado(_heladosList, MesaSeleccionada);
-                    _mesaService.cambiarEstadoMesa(MesaSeleccionada.Id, true);
+                    _mesaService.cambiarEstadoMesa(MesaSeleccionada.Id, isMesaActivo);
+
+                    _heladosList.Clear();
+                    
+                    
                 }
                 catch (Exception ex) {
                     MessageBox.Show("No se pudo guardar la cuenta correctamente");
