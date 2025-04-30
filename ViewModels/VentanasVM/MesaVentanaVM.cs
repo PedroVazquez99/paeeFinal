@@ -102,6 +102,7 @@ namespace TPVproyecto.ViewModels.VentanasVM
             }
             else
             {
+                _heladosList.Clear();
                 ObservableCollection<Helado> heladosLista = _heladoService.ObtenerHeladosNoPagados(MesaSeleccionada.Id);
                 foreach (Helado helado in heladosLista) // Suponiendo que heladosCollection es tu ObservableCollection original
                 {
