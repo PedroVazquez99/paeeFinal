@@ -19,7 +19,7 @@ namespace TPVproyecto.ViewModels.VentanasVM
         // Servicios
         private MesaService _mesaService;
         private HeladoService _heladoService;
-
+        public Action CerrarVentana { get; set; }
         // Variables
         private ObservableCollection<Mesa> _mesas;
         public ObservableCollection<Mesa> Mesas {
@@ -64,6 +64,7 @@ namespace TPVproyecto.ViewModels.VentanasVM
                 execute: EjecutarAceptar,
                 canExecute: PuedeEjecutarAceptar
             );
+
         }
 
         // Funciones Mesas
@@ -82,7 +83,7 @@ namespace TPVproyecto.ViewModels.VentanasVM
         private void EjecutarAceptar(object parameter)
         {
             Console.Write(parameter);
-            if(MesaSeleccionada != null && MesaSeleccionada.IsActivo == false)
+            if(_heladosList != null && _heladosList.Count > 0 && MesaSeleccionada != null && MesaSeleccionada.IsActivo == false)
             {
                 try
                 {
@@ -91,8 +92,10 @@ namespace TPVproyecto.ViewModels.VentanasVM
                     _mesaService.cambiarEstadoMesa(MesaSeleccionada.Id, isMesaActivo);
 
                     _heladosList.Clear();
-                    
-                    
+
+                    // Invocar la acción para cerrar la ventana
+                    CerrarVentana?.Invoke();
+
                 }
                 catch (Exception ex) {
                     MessageBox.Show("No se pudo guardar la cuenta correctamente");

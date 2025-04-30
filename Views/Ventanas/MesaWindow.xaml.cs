@@ -28,6 +28,8 @@ namespace TPVproyecto.Views.Ventanas
             InitializeComponent();
             _pagarVentanaVM = new MesaVentanaVM(helados);
             this.DataContext = _pagarVentanaVM;
+
+            this._pagarVentanaVM.CerrarVentana = () => this.Close();
         }
     }
 }
