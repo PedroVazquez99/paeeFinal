@@ -22,6 +22,8 @@ namespace TPVproyecto.Models.Pedido
         public int ID_Tamanyo { get; set; }
         [ForeignKey("Sabor")]
         public int ID_Sabor { get; set; }
+        [ForeignKey("Topping")]
+        public int ID_Topping { get; set; }
 
         public decimal Subtotal { get; set; }
 
@@ -29,6 +31,8 @@ namespace TPVproyecto.Models.Pedido
         public virtual Tipo Tipo { get; set; }
         public virtual Tamanyo Tamanyo { get; set; }
         public virtual Sabor Sabor { get; set; }
+        public virtual Topping Topping { get; set; }
+
         // FALTA TOPPINGS
     }
 }

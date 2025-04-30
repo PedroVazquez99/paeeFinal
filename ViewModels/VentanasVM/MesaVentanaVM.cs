@@ -93,14 +93,24 @@ namespace TPVproyecto.ViewModels.VentanasVM
 
                     _heladosList.Clear();
 
-                    // Invocar la acción para cerrar la ventana
-                    CerrarVentana?.Invoke();
+
 
                 }
                 catch (Exception ex) {
                     MessageBox.Show("No se pudo guardar la cuenta correctamente");
                 }
             }
+            else
+            {
+                ObservableCollection<Helado> heladosLista = _heladoService.ObtenerHeladosNoPagados(MesaSeleccionada.Id);
+                foreach (Helado helado in heladosLista) // Suponiendo que heladosCollection es tu ObservableCollection original
+                {
+                    _heladosList.Add(helado);
+                }
+            }
+
+            // Invocar la acción para cerrar la ventana
+            CerrarVentana?.Invoke();
         }
         private bool PuedeEjecutarAceptar(object parameter)
         {

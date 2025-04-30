@@ -40,6 +40,7 @@ namespace TPVproyecto.Services
                         ID_Tipo = helado.TipoH.Id, // Tipo de helado (ej. Vainilla)
                         ID_Tamanyo = helado.TamanyoH.Id, // Tamaño (ej. Grande)
                         ID_Sabor = helado.SaboresH.Id, // Sabor (ej. Fresa),
+                        ID_Topping = helado.ToppingsH.Id,
                         Subtotal = calcularTotalHelado(helado)
                     };
                     precioTotal += linea.Subtotal;
@@ -89,6 +90,30 @@ namespace TPVproyecto.Services
 
             return total;
         }
+
+        public ObservableCollection<Helado> ObtenerHeladosNoPagados(int idMesa)
+        {
+            var helados = _dbContext.Pedido
+                .Where(p => p.IdMesa == idMesa && !p.IsPagado)
+                .SelectMany(p => p.LineasPedido)
+                .Select(lp => new Helado
+                {
+                    Id = lp.ID, // Usamos el ID de la línea como identificador del helado
+                    TipoH = _dbContext.Tipo.FirstOrDefault(t => t.Id == lp.ID_Tipo),
+                    TamanyoH = _dbContext.Tamanyo.FirstOrDefault(t => t.Id == lp.ID_Tamanyo),
+                    SaboresH = _dbContext.Sabor.FirstOrDefault(s => s.Id == lp.ID_Sabor),
+                    ToppingsH = _dbContext.Topping.FirstOrDefault(t => t.Id == lp.ID_Topping),
+                })
+                .ToList();
+
+            return new ObservableCollection<Helado>(helados);
+        }
+
+
+
+
+
+
 
     }
 }

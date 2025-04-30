@@ -23,16 +23,17 @@ namespace TPVproyecto.Database
         }
         public DbSet<Producto> Productos { get; set; }
         public DbSet<Pedido> Pedido { get; set; }
+        public DbSet<LineaPedido> Lineas_Pedido { get; set; }
 
         // Helado
         public DbSet<Tipo> Tipo { get; set; }
         public DbSet<Tamanyo> Tamanyo { get; set; }
-        public DbSet<Sabor> Sabores { get; set; }
-        public DbSet<Topping> Toppings { get; set; }
+        public DbSet<Sabor> Sabor { get; set; }
+        public DbSet<Topping> Topping { get; set; }
 
         // Mesa
         public DbSet<Mesa> Mesas { get; set; }
-        
+
 
     }
 }
