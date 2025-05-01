@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TPVproyecto.Views.Paginas.Admin.AdminModal"
         mc:Ignorable="d"
-        Title="EditarTipoWindow" Height="450" Width="800">
+        Title="EditarTipoWindow" Height="450" Width="800"
+        xmlns:mpvk="http://schemas.mpcoding.com/mpcoding/wpf/virtualkeys">
     <Grid>
 
 
@@ -15,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Vertical">
-            <TextBox Width="200" Text="{Binding Tipo.NombreTipo}" Margin="0,75,0,0" Height="30"></TextBox>
+            <TextBox mpvk:VirtualKeyboard.KeyboardWidth="600" mpvk:VirtualKeyboard.Mode="TouchAndMouse" Width="200" Text="{Binding Tipo.NombreTipo}" Margin="0,75,0,0" Height="30"></TextBox>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0" Grid.Row="1" Grid.ColumnSpan="2" >
