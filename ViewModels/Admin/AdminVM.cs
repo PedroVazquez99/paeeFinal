@@ -27,6 +27,7 @@ namespace TPVproyecto.ViewModels.Admin
 
             TipoCommand = new RelayCommand(TipoAdmin);
             TamanyoCommand = new RelayCommand(TamanyoAdmin);
+            SaborCommand = new RelayCommand(SaborAdmin);
 
             // Pagina de Inicio
             CurrentViewAdmin = new TipoHAdminVM();
@@ -36,9 +37,11 @@ namespace TPVproyecto.ViewModels.Admin
         // Comandos
         public ICommand TipoCommand { get; set; }
         public ICommand TamanyoCommand { get; set; }
+        public ICommand SaborCommand { get; set; }
 
         // Vistas
         private void TipoAdmin(object obj) => CurrentViewAdmin = new TipoHAdminVM();
         private void TamanyoAdmin(object obj) => CurrentViewAdmin = new TamanyoHAdminVM();
+        private void SaborAdmin(object obj) => CurrentViewAdmin = new SaborHAdminVM();
     }
 }

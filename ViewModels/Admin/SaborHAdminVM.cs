@@ -11,20 +11,19 @@ using TPVproyecto.Services;
 
 namespace TPVproyecto.ViewModels.Admin
 {
-    public class TamanyoHAdminVM : BaseVM
+    public class SaborHAdminVM : BaseVM
     {
+        private ObservableCollection<Sabor> _sabores;
 
-        private ObservableCollection<Tamanyo> _tamanyos;
+        private Sabor _saborSeleccionado;
 
-        private Tamanyo _tamanyoSeleccionado;
-
-        public ObservableCollection<Tamanyo> Tamanyos
+        public ObservableCollection<Sabor> Sabores
         {
-            get => _tamanyos;
+            get => _sabores;
             set
             {
-                _tamanyos = value;
-                OnPropertyChanged(nameof(Tamanyos));
+                _sabores = value;
+                OnPropertyChanged(nameof(Sabores));
             }
         }
 
@@ -34,12 +33,12 @@ namespace TPVproyecto.ViewModels.Admin
         //Servicio
         private ElegirService _elegirService;
 
-        public TamanyoHAdminVM()
+        public SaborHAdminVM()
         {
             _elegirService = new ElegirService();
-            _tamanyos = new ObservableCollection<Tamanyo>(_elegirService.obtenerTamanyos());
+            _sabores = new ObservableCollection<Sabor>(_elegirService.obtenerSabores());
 
-            ModalEditarCommand = new EditarTamanyoModalCommand(); // Cambiar por el modal de Tamanyos
+            ModalEditarCommand = new EditarSaborModalCommand(); // Cambiar por el modal de Tamanyos
         }
 
     }

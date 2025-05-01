@@ -11,4 +11,8 @@
         <view:TamanyoHAdminUC />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vmodel:SaborHAdminVM}">
+        <view:SaborHAdminUC />
+    </DataTemplate>
+
 </ResourceDictionary>
