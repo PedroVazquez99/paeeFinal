@@ -46,6 +46,8 @@ namespace TPVproyecto.Services.Tamanyos
                 Tamanyo nuevoTamanyo = new Tamanyo();
                 nuevoTamanyo.NombreTamanyo = tamanyo.NombreTamanyo;
                 _context.Tamanyo.Add(nuevoTamanyo);
+
+                _context.SaveChanges();
             }
             catch (Exception ex)
             {

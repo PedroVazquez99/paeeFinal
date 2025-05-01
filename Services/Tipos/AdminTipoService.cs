@@ -43,6 +43,8 @@ namespace TPVproyecto.Services.Tipos
                 Tipo nuevoTipo = new Tipo();
                 nuevoTipo.NombreTipo = tipo.NombreTipo;
                 _context.Tipo.Add(nuevoTipo);
+
+                _context.SaveChanges();
             }
             catch (Exception ex)
             {

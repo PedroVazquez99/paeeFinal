@@ -44,6 +44,8 @@ namespace TPVproyecto.Services.Sabores
                 Sabor nuevoSabor = new Sabor();
                 nuevoSabor.SaborNombre = sabor.SaborNombre;
                 _context.Sabor.Add(nuevoSabor);
+
+                _context.SaveChanges();
             }
             catch (Exception ex)
             {
