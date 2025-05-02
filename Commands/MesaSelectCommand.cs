@@ -11,13 +11,13 @@ using TPVproyecto.Views.Ventanas;
 
 namespace TPVproyecto.Commands
 {
-    public class PagarCommand : CommandBase
+    public class MesaSelectCommand : CommandBase
     {
         //private HeladoService heladoS = new HeladoService();
         private MesaWindow _mesaWindow;
         private ObservableCollection<Helado> _helados;
 
-        public PagarCommand(ObservableCollection<Helado> helados)
+        public MesaSelectCommand(ObservableCollection<Helado> helados)
         {
             _helados = helados;
         }

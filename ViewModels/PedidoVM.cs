@@ -45,7 +45,8 @@ namespace TPVproyecto.ViewModels
 
         // Commands
         public ICommand BorrarHeladoCommand { get; }
-        public ICommand PagarCommand { get; } 
+        public ICommand MesaSelectCommand { get; } 
+        public ICommand PagarSelectCommand { get; } 
 
         private InicioVM _mainViewModel;
 
@@ -59,42 +60,15 @@ namespace TPVproyecto.ViewModels
             );
 
 
-            PagarCommand = new PagarCommand(_mainViewModel.helados);
+            MesaSelectCommand = new MesaSelectCommand(_mainViewModel.helados);
+            PagarSelectCommand = new PagarSelectCommand();
 
             _helados.CollectionChanged += (s, e) =>
             {
                 OnPropertyChanged(nameof(Total)); // Actualizar el total si la colección cambia
             };
 
-            //helados = new ObservableCollection<Helado>();
-            //Helado helado = new Helado(0, new Tipo(), new Tamanyo(), new Sabor(), new Topping());
-            //helado.Id = 1;
-            //helado.TipoH = new Tipo();
-            //helado.TipoH.TipoNombre = "Nombre";
-            //helado.TamanyoH = new Tamanyo();
-            //helado.SaboresH = new Sabor();
-            //Sabor sabor1 = new Sabor
-            //{
-            //    Id = 1,
-            //    SaborNombre = "Chocolate",
-            //    azucar = true
-            //};
 
-            //Sabor sabor2 = new Sabor
-            //{
-            //    Id = 2,
-            //    SaborNombre = "Vainilla",
-            //    azucar = false
-            //};
-            //helado.SaboresH = sabor1;
-            //helados.Add(helado);
-            //helados.Add(helado);
-            //helados.Add(helado);
-            //helados.Add(helado);
-            //helados.Add(helado);
-            //helados.Add(helado);
-            //helados.Add(helado);
-            //helados.Add(helado);
         }
 
         public void borrarHeladoPedido(int index)

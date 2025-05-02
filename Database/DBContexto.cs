@@ -32,7 +32,7 @@ namespace TPVproyecto.Database
         public DbSet<Topping> Topping { get; set; }
 
         // Mesa
-        public DbSet<Mesa> Mesas { get; set; }
+        public DbSet<Mesa> Mesa { get; set; }
 
 
     }

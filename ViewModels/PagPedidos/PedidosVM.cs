@@ -51,7 +51,7 @@ namespace TPVproyecto.ViewModels.PagPedidos
         public PedidosVM(NavigationStore navigationStore) {
             _navigationStore = navigationStore;
             _pedidoService = new PedidosService();
-            PaginacionHelper = new PaginacionHelper<Pedido>(new ObservableCollection<Pedido>(_pedidoService.obtenerPedido()), 6);
+            PaginacionHelper = new PaginacionHelper<Pedido>(new ObservableCollection<Pedido>(_pedidoService.ObtenerPedidos()), 6);
             _pedidos = new ObservableCollection<Pedido>(PaginacionHelper.getPaginaActualElementos());
             _searchQuery = "";
 

@@ -32,7 +32,7 @@ namespace TPVproyecto.Services.Pedidos
         // Obtener detalles de una mesa por su ID
         public Mesa ObtenerMesa(int idMesa)
         {
-            return _context.Mesas.FirstOrDefault(m => m.Id == idMesa);
+            return _context.Mesa.FirstOrDefault(m => m.Id == idMesa);
         }
 
 
