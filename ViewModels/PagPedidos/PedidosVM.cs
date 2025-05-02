@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using TPVproyecto.Commands;
 using TPVproyecto.Helpers;
@@ -15,45 +13,74 @@ namespace TPVproyecto.ViewModels.PagPedidos
 {
     public class PedidosVM : BaseVM
     {
-        NavigationStore _navigationStore;
-        PedidosService _pedidoService;
+        private NavigationStore _navigationStore;
+        private readonly PedidosService _pedidoService;
+        private readonly LineasPedidoService _lineasPedidoService;
         public PaginacionHelper<Pedido> PaginacionHelper;
 
         private string _searchQuery;
         public string SearchQuery
         {
-            get { return _searchQuery; }
+            get => _searchQuery;
             set
             {
                 if (_searchQuery != value)
                 {
                     _searchQuery = value;
                     OnPropertyChanged(nameof(SearchQuery));
-                    FiltrarPedidos(Pedidos, _searchQuery);
+                    FiltrarPedidos();
                 }
             }
         }
 
-        
         public ICommand Anterior { get; set; }
-        public ICommand Siguiente {  get; set; }
+        public ICommand Siguiente { get; set; }
+        public ICommand SeleccionarPedidoCommand { get; set; }
+
+        private Pedido _pedidoSeleccionado;
+        public Pedido PedidoSeleccionado
+        {
+            get => _pedidoSeleccionado;
+            set
+            {
+                _pedidoSeleccionado = value;
+                OnPropertyChanged(nameof(PedidoSeleccionado));
+                CargarLineasPedido(_pedidoSeleccionado);
+            }
+        }
 
         private ObservableCollection<Pedido> _pedidos;
-        public ObservableCollection<Pedido> Pedidos {
+        public ObservableCollection<Pedido> Pedidos
+        {
             get => _pedidos;
-            set { 
+            set
+            {
                 _pedidos = value;
                 OnPropertyChanged(nameof(Pedidos));
             }
-        
         }
 
-        public PedidosVM(NavigationStore navigationStore) {
+        private ObservableCollection<LineaPedido> _lineasPedido;
+        public ObservableCollection<LineaPedido> LineasPedido
+        {
+            get => _lineasPedido;
+            set
+            {
+                _lineasPedido = value;
+                OnPropertyChanged(nameof(LineasPedido));
+            }
+        }
+
+        public PedidosVM(NavigationStore navigationStore)
+        {
             _navigationStore = navigationStore;
             _pedidoService = new PedidosService();
+            _lineasPedidoService = new LineasPedidoService();
+
             PaginacionHelper = new PaginacionHelper<Pedido>(new ObservableCollection<Pedido>(_pedidoService.ObtenerPedidos()), 6);
             _pedidos = new ObservableCollection<Pedido>(PaginacionHelper.getPaginaActualElementos());
             _searchQuery = "";
+            _lineasPedido = new ObservableCollection<LineaPedido>();
 
             Anterior = new RelayCommand(
                 execute: EjecutarAnterior,
@@ -65,71 +92,73 @@ namespace TPVproyecto.ViewModels.PagPedidos
                 canExecute: PuedeEjecutarSiguiente
             );
 
+            SeleccionarPedidoCommand = new RelayCommand(
+                execute: EjecutarSeleccionarPedido,
+                canExecute: PuedeEjecutarSeleccionarPedido
+            );
 
-
-        }
-
-        public ObservableCollection<Pedido> obtenerLista()
-        {
-
-            return _pedidos;
         }
 
         private void EjecutarAnterior(object parameter)
         {
             PaginacionHelper.anteriorPag();
-            ActualizarColeccion(_pedidos, PaginacionHelper.getPaginaActualElementos());
+            ActualizarColeccion(Pedidos, PaginacionHelper.getPaginaActualElementos());
 
-            ((RelayCommand)Anterior).OnCanExecuteChanged(); 
+            ((RelayCommand)Anterior).OnCanExecuteChanged();
             ((RelayCommand)Siguiente).OnCanExecuteChanged();
         }
 
         private void EjecutarSiguiente(object parameter)
         {
             PaginacionHelper.siguientePag();
-            ActualizarColeccion(_pedidos, PaginacionHelper.getPaginaActualElementos());
+            ActualizarColeccion(Pedidos, PaginacionHelper.getPaginaActualElementos());
 
-            ((RelayCommand)Anterior).OnCanExecuteChanged(); 
+            ((RelayCommand)Anterior).OnCanExecuteChanged();
             ((RelayCommand)Siguiente).OnCanExecuteChanged();
-
         }
 
-        private void ActualizarColeccion(ObservableCollection<Pedido> coleccion, IEnumerable<Pedido> nuevosElementos)
+        private void EjecutarSeleccionarPedido(object parameter)
         {
-            // Limpia la colección existente
-            coleccion.Clear();
+            if (parameter is Pedido pedido)
+            {
+                PedidoSeleccionado = pedido;
+                CargarLineasPedido(pedido);
+            }
+        }
 
-            // Agrega los nuevos elementos a la colección
+        private bool PuedeEjecutarSeleccionarPedido(object parameter)
+        {
+            return parameter is Pedido;
+        }
+
+        private void CargarLineasPedido(Pedido pedido)
+        {
+            if (pedido != null)
+            {
+                var lineas = _lineasPedidoService.ObtenerLineasPedidoPorPedido(pedido.ID_Pedido);
+                ActualizarColeccion(LineasPedido, lineas);
+            }
+        }
+
+        private void ActualizarColeccion<T>(ObservableCollection<T> coleccion, IEnumerable<T> nuevosElementos)
+        {
+            coleccion.Clear();
             foreach (var item in nuevosElementos)
             {
                 coleccion.Add(item);
             }
         }
 
-        public bool PuedeEjecutarSiguiente(object parameter)
+        private void FiltrarPedidos()
         {
-            // logica para habilitar el boton de guardar
-            return PaginacionHelper.ActualPagina < PaginacionHelper.TotalPages;
+            var pedidosFiltrados = string.IsNullOrEmpty(SearchQuery)
+                ? PaginacionHelper.getPaginaActualElementos()
+                : PaginacionHelper.getPaginaActualElementos().Where(p => p.ID_Pedido.ToString().Contains(SearchQuery, StringComparison.OrdinalIgnoreCase));
+
+            ActualizarColeccion(Pedidos, pedidosFiltrados);
         }
 
-        public bool PuedeEjecutarAnterior(object parameter)
-        {
-            // logica para habilitar el boton de guardar
-            return PaginacionHelper.ActualPagina > 1;
-        }
-
-        // Método para filtrar los pedidos según el texto de búsqueda
-        public ObservableCollection<Pedido> FiltrarPedidos(ObservableCollection<Pedido> pedidos, string searchQuery)
-        {
-            if (string.IsNullOrEmpty(searchQuery))
-            {
-                return pedidos;  // Devuelve todos los pedidos si no hay búsqueda
-            }
-            else
-            {
-                // return pedidos.Where(p => p.ID_Pedido.ToString().Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
-                return (ObservableCollection<Pedido>)pedidos.Where(p => p.ID_Pedido.ToString().Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
-            }
-        }
+        public bool PuedeEjecutarSiguiente(object parameter) => PaginacionHelper.ActualPagina < PaginacionHelper.TotalPages;
+        public bool PuedeEjecutarAnterior(object parameter) => PaginacionHelper.ActualPagina > 1;
     }
 }

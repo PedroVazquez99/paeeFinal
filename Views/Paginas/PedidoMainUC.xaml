@@ -6,38 +6,53 @@
              xmlns:local="clr-namespace:TPVproyecto.Views.Paginas"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
-    
- 
+
+
     <Grid>
- 
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="5*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="3*"/>
+            <!-- Nueva fila para las líneas de pedido -->
         </Grid.RowDefinitions>
 
-        <TextBox Text="{Binding SearchQuery}"></TextBox>
-        
-        
-        <ListBox ItemsSource="{Binding Pedidos}" Grid.Row="1">
+        <!-- Campo de búsqueda -->
+        <TextBox Text="{Binding SearchQuery}" Grid.Row="0"/>
+
+        <!-- Lista de pedidos -->
+        <ListBox ItemsSource="{Binding Pedidos}" Grid.Row="1"
+                 SelectedItem="{Binding PedidoSeleccionado, Mode=TwoWay}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <!-- Cada item del ListBox mostrará el Sabor y el Tipo del helado -->
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding ID_Pedido}" FontWeight="Bold" Margin="5" />
                         <TextBlock Text="{Binding Mesa.NombreMesa}" Margin="5" />
-
-
-                        <Button Content="Detalles" Margin="5" />
+                        <TextBlock Text="{Binding Total}" Margin="5" />
+                        <Button Content="Detalles" Command="{Binding DataContext.SeleccionarPedidoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Margin="5"/>
                         <Button Content="Borrar" Margin="5"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <StackPanel Grid.Row="2" >
-            <Button Content="Anterior" Grid.Column="2" Command="{Binding Anterior}"></Button>
-            <Button Content="Siguiente" Grid.Column="1" Command="{Binding Siguiente}"></Button>
+        <!-- Lista de líneas de pedido del pedido seleccionado -->
+        <ListBox ItemsSource="{Binding LineasPedido}" Grid.Row="3">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding ID}" FontWeight="Bold" Margin="5"/>
+                        <TextBlock Text="{Binding Tipo.NombreTipo}" Margin="5"/>
+                        <TextBlock Text="{Binding Subtotal}" Margin="5"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Botones de paginación -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Anterior" Command="{Binding Anterior}" Width="100"/>
+            <Button Content="Siguiente" Command="{Binding Siguiente}" Width="100"/>
         </StackPanel>
     </Grid>
 </UserControl>
