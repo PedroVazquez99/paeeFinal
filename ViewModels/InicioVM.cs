@@ -50,7 +50,7 @@ namespace TPVproyecto.ViewModels
             };
 
             AdminCommand = new NavCommand<AdminVM>(navigationStore, () => new AdminVM(navigationStore));
-            CuentasCommand = new NavCommand<PedidosVM>(navigationStore, () => new PedidosVM(navigationStore));
+            CuentasCommand = new NavCommand<PedidosVM>(navigationStore, () => new PedidosVM(navigationStore, this));
         }
 
         public ObservableCollection<Helado> agregarHelado(Helado h)

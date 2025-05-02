@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TPVproyecto.Views.Paginas"
+             xmlns:ucE="clr-namespace:TPVproyecto.Views.Elegir"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
 
@@ -12,32 +13,51 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="5*"/>
+            <!-- SE DIVIDE EN 2 COLUMNAS -->
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="3*"/>
-            <!-- Nueva fila para las líneas de pedido -->
+            <!-- LÍNEAS DE PEDIDO QUEDAN IGUAL -->
         </Grid.RowDefinitions>
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <!-- Área de Pedidos -->
+            <ColumnDefinition Width="2*"/>
+            <!-- Componente externo -->
+        </Grid.ColumnDefinitions>
+
         <!-- Campo de búsqueda -->
-        <TextBox Text="{Binding SearchQuery}" Grid.Row="0"/>
+        <TextBox Text="{Binding SearchQuery}" Grid.Row="0" Grid.ColumnSpan="2"/>
 
-        <!-- Lista de pedidos -->
-        <ListBox ItemsSource="{Binding Pedidos}" Grid.Row="1"
-                 SelectedItem="{Binding PedidoSeleccionado, Mode=TwoWay}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding ID_Pedido}" FontWeight="Bold" Margin="5" />
-                        <TextBlock Text="{Binding Mesa.NombreMesa}" Margin="5" />
-                        <TextBlock Text="{Binding Total}" Margin="5" />
-                        <Button Content="Detalles" Command="{Binding DataContext.SeleccionarPedidoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Margin="5"/>
-                        <Button Content="Borrar" Margin="5"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <!-- LISTA DE PEDIDOS (IZQUIERDA) -->
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <ListBox ItemsSource="{Binding Pedidos}"
+                     SelectedItem="{Binding PedidoSeleccionado, Mode=TwoWay}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding ID_Pedido}" FontWeight="Bold" Margin="5" />
+                            <TextBlock Text="{Binding Mesa.NombreMesa}" Margin="5" />
+                            <TextBlock Text="{Binding Total}" Margin="5" />
+                            <Button Content="Detalles" Command="{Binding DataContext.SeleccionarPedidoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Margin="5"/>
+                            <Button Content="Borrar" Margin="5"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
-        <!-- Lista de líneas de pedido del pedido seleccionado -->
-        <ListBox ItemsSource="{Binding LineasPedido}" Grid.Row="3">
+            <!-- Botones de paginación -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Anterior" Command="{Binding Anterior}" Width="100"/>
+                <Button Content="Siguiente" Command="{Binding Siguiente}" Width="100"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- ÁREA DEL COMPONENTE (DERECHA) -->
+        <ucE:ElegirUC DataContext="{Binding ElegirVM_Main}" Grid.Row="1" Grid.Column="1"  Margin="10,10,10,10" ></ucE:ElegirUC>
+
+        <!-- LÍNEAS DE PEDIDO (SE MANTIENE IGUAL) -->
+        <ListBox ItemsSource="{Binding LineasPedido}" Grid.Row="3" Grid.ColumnSpan="2">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -48,11 +68,5 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-
-        <!-- Botones de paginación -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Anterior" Command="{Binding Anterior}" Width="100"/>
-            <Button Content="Siguiente" Command="{Binding Siguiente}" Width="100"/>
-        </StackPanel>
     </Grid>
 </UserControl>

@@ -18,6 +18,8 @@ namespace TPVproyecto.ViewModels.PagPedidos
         private readonly LineasPedidoService _lineasPedidoService;
         public PaginacionHelper<Pedido> PaginacionHelper;
 
+        public ElegirVM ElegirVM_Main { get; set; }
+
         private string _searchQuery;
         public string SearchQuery
         {
@@ -71,7 +73,7 @@ namespace TPVproyecto.ViewModels.PagPedidos
             }
         }
 
-        public PedidosVM(NavigationStore navigationStore)
+        public PedidosVM(NavigationStore navigationStore, InicioVM inicioVM)
         {
             _navigationStore = navigationStore;
             _pedidoService = new PedidosService();
@@ -81,6 +83,9 @@ namespace TPVproyecto.ViewModels.PagPedidos
             _pedidos = new ObservableCollection<Pedido>(PaginacionHelper.getPaginaActualElementos());
             _searchQuery = "";
             _lineasPedido = new ObservableCollection<LineaPedido>();
+
+            ElegirVM_Main = inicioVM.ElegirVM_Main;
+
 
             Anterior = new RelayCommand(
                 execute: EjecutarAnterior,
