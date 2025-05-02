@@ -1,12 +1,8 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using TPVproyecto.Database;
 using TPVproyecto.Models;
 using TPVproyecto.Models.Pedido;
@@ -15,71 +11,62 @@ namespace TPVproyecto.Services.Pedidos
 {
     public class PedidosService
     {
-        public List<Pedido> obtenerPedido()
+        private readonly DBContexto _context;
+
+        // Constructor
+        public PedidosService()
         {
-            var Pedidos = new List<Pedido>();
+            _context = new DBContexto();
+        }
 
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings["SQLMicrosoft"]))
-            {
-                connection.Open();
-                string query = "SELECT ID_Pedido, idMesa, Fecha, Total, IsPagado FROM Pedido";
+        // Obtener todos los pedidos de la base de datos
+        public List<Pedido> ObtenerPedidos()
+        {
+            var pedidos = _context.Pedido
+                .Include(p => p.Mesa) // Cargar información de la mesa vinculada
+                .ToList();
 
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Pedido pedidoBBDD = new Pedido
-                            {
-                                ID_Pedido = reader.GetInt32(0), // Columna Nombre
-                                IdMesa = reader.GetInt32(1),
-                                Fecha = reader.GetDateTime(2),
-                                Total = reader.GetDecimal(3),
-                                IsPagado = reader.GetBoolean(4),
-    
-                            };
-                            Pedidos.Add(pedidoBBDD);
-                            // Ahora, con el IdMesa, obtenemos el NombreMesa
-                        pedidoBBDD.Mesa = ObtenerMesa(pedidoBBDD.IdMesa);
-                            Console.WriteLine(reader);
-                        }
-                    }
-                }
-            }
+            return pedidos;
+        }
 
-            return Pedidos;
+        // Obtener detalles de una mesa por su ID
+        public Mesa ObtenerMesa(int idMesa)
+        {
+            return _context.Mesas.FirstOrDefault(m => m.Id == idMesa);
         }
 
 
-        // Método adicional para obtener los detalles de la Mesa
-        private Mesa ObtenerMesa(int idMesa)
+        // Completar pedido
+        public void CompletarPedido(int idMesa)
         {
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings["SQLMicrosoft"]))
+            try
             {
-                connection.Open();
-                string query = "SELECT NombreMesa FROM Mesa WHERE id = @idMesa";
+                // Obtener todos los pedidos de la mesa
+                var pedidosMesa = _context.Pedido.Where(p => p.IdMesa == idMesa).ToList();
 
-                using (SqlCommand command = new SqlCommand(query, connection))
+                if (pedidosMesa.Any())
                 {
-                    command.Parameters.AddWithValue("@idMesa", idMesa);
-
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    // Actualizar el estado de los pedidos
+                    foreach (var pedido in pedidosMesa)
                     {
-                        if (reader.Read())
-                        {
-                            return new Mesa
-                            {
-                                NombreMesa = reader.GetString(0)
-                            };
-                        }
+                        pedido.IsPagado = true;
                     }
+
+                    // Guardar cambios en la base de datos
+                    _context.Pedido.UpdateRange(pedidosMesa);
+                    _context.SaveChanges();
+
+                    // MessageBox.Show($"Se han actualizado {pedidosMesa.Count} pedidos de la mesa {idMesa}.", "Éxito");
+                }
+                else
+                {
+                    MessageBox.Show($"No se encontraron pedidos para la mesa {idMesa}.", "Aviso");
                 }
             }
-
-            return null;
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo actualizar los pedidos de la mesa.", "Error");
+            }
         }
-
     }
-
 }
