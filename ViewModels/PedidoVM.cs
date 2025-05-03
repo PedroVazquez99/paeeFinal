@@ -28,7 +28,7 @@ namespace TPVproyecto.ViewModels
             }
             set
             {
-                _total = value; // 🔄 Guarda el valor en `_total`
+                _total = value; // Guarda el valor en `_total`
                 OnPropertyChanged(nameof(Total));
             }
         }
@@ -63,7 +63,7 @@ namespace TPVproyecto.ViewModels
 
 
             MesaSelectCommand = new MesaSelectCommand(_mainViewModel.helados);
-            PagarSelectCommand = new PagarSelectCommand(Total);
+            PagarSelectCommand = new PagarSelectCommand(Total, mainViewModel.helados);
 
             _helados.CollectionChanged += (s, e) =>
             {
@@ -74,8 +74,8 @@ namespace TPVproyecto.ViewModels
             {
                 if (e.PropertyName == nameof(Total))
                 {
-                    PagarSelectCommand = new PagarSelectCommand(Total);
-                    OnPropertyChanged(nameof(PagarSelectCommand)); // 🔄 Notifica que el comando ha cambiado
+                    PagarSelectCommand = new PagarSelectCommand(Total, mainViewModel.helados);
+                    OnPropertyChanged(nameof(PagarSelectCommand)); // Notifica que el comando ha cambiado
                 }
             };
 

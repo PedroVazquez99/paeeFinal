@@ -8,10 +8,12 @@
         Title="PagarWindow" Height="450" Width="800"
         xmlns:mpvk="http://schemas.mpcoding.com/mpcoding/wpf/virtualkeys">
     <Grid>
-        <TextBlock Text="A pagar: " FontSize="30" Margin="329,52,329,329"></TextBlock>
-        <TextBlock Text="{Binding Total}" FontSize="30" Margin="451,52,207,329"></TextBlock>
-        <TextBlock Text="Cambio: " FontSize="30" Margin="329,122,329,259"></TextBlock>
+        <TextBlock Text="A pagar: " FontSize="30" Margin="192,46,466,335"></TextBlock>
+        <TextBlock Text="{Binding Total}" FontSize="30" Margin="400,46,258,335"></TextBlock>
+        <TextBlock Text="Cambio: " FontSize="30" Margin="192,116,466,265"></TextBlock>
+        <TextBlock Text="{Binding Cambio}" FontSize="30" Margin="367,116,291,265"></TextBlock>
         <TextBox mpvk:VirtualKeyboard.KeyboardWidth="600" mpvk:VirtualKeyPad.Mode="TouchAndMouse" Height="50" Width="200" Text="{Binding TextoPad}" Margin="234,247,366,137"/>
-        <Button Width="100" Height="50" Margin="472,247,228,137">Aceptar</Button>
+        <Button Command="{Binding DataContext.PagoCash, RelativeSource={RelativeSource AncestorType=Window}}"
+                Width="100" Height="50" Margin="472,247,228,137" >Aceptar</Button>
     </Grid>
 </Window>
