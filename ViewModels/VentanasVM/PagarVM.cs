@@ -20,9 +20,20 @@ namespace TPVproyecto.ViewModels.VentanasVM
             }
         }
 
+        private decimal _total;
+        public decimal Total
+        {
+            get { return _total; }
+            set
+            {
+                _total = value;
+                OnPropertyChanged(nameof(Total));
+            }
+        }
+
         // Constructor
-        public PagarVM() {
-            
+        public PagarVM(decimal total) {
+            _total = total;
         }
 
 

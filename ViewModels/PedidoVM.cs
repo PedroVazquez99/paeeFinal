@@ -28,9 +28,11 @@ namespace TPVproyecto.ViewModels
             }
             set
             {
+                _total = value; // 🔄 Guarda el valor en `_total`
                 OnPropertyChanged(nameof(Total));
             }
         }
+
 
         private ObservableCollection<Helado> _helados => _mainViewModel.helados;
         
@@ -46,7 +48,7 @@ namespace TPVproyecto.ViewModels
         // Commands
         public ICommand BorrarHeladoCommand { get; }
         public ICommand MesaSelectCommand { get; } 
-        public ICommand PagarSelectCommand { get; } 
+        public ICommand PagarSelectCommand { get; set; } 
 
         private InicioVM _mainViewModel;
 
@@ -61,11 +63,20 @@ namespace TPVproyecto.ViewModels
 
 
             MesaSelectCommand = new MesaSelectCommand(_mainViewModel.helados);
-            PagarSelectCommand = new PagarSelectCommand();
+            PagarSelectCommand = new PagarSelectCommand(Total);
 
             _helados.CollectionChanged += (s, e) =>
             {
                 OnPropertyChanged(nameof(Total)); // Actualizar el total si la colección cambia
+            };
+
+            PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(Total))
+                {
+                    PagarSelectCommand = new PagarSelectCommand(Total);
+                    OnPropertyChanged(nameof(PagarSelectCommand)); // 🔄 Notifica que el comando ha cambiado
+                }
             };
 
 

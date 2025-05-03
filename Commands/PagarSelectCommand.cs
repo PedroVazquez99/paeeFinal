@@ -12,14 +12,17 @@ namespace TPVproyecto.Commands
     public class PagarSelectCommand : CommandBase
     {
         PagarWindow _pagarWindow;
+        decimal _total;
 
-        public PagarSelectCommand() { }
+        public PagarSelectCommand(decimal total) {
+            _total = total;
+        }
 
         public override void Execute(object? parameter)
         {
             if (_pagarWindow == null || !_pagarWindow.IsLoaded)
             {
-                _pagarWindow = new PagarWindow();
+                _pagarWindow = new PagarWindow(_total);
                 _pagarWindow.Show();
 
             }
@@ -27,6 +30,12 @@ namespace TPVproyecto.Commands
             {
                 _pagarWindow.Close();
             }
+        }
+
+        public decimal setTotal(decimal total)
+        {
+            _total = total;
+            return _total;
         }
     }
 }

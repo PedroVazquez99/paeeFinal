@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TPVproyecto.ViewModels.VentanasVM;
 
 namespace TPVproyecto.Views.Ventanas
 {
@@ -19,9 +20,13 @@ namespace TPVproyecto.Views.Ventanas
     /// </summary>
     public partial class PagarWindow : Window
     {
-        public PagarWindow()
+        PagarVM _pagarVM;
+
+        public PagarWindow(decimal total)
         {
             InitializeComponent();
+            _pagarVM = new PagarVM(total);
+            this.DataContext = _pagarVM;
         }
     }
 }
