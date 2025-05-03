@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Input;
 using TPVproyecto.Commands;
 using TPVproyecto.Helpers;
+using TPVproyecto.Models;
 using TPVproyecto.Models.Pedido;
 using TPVproyecto.Services;
 using TPVproyecto.Services.Pedidos;
@@ -15,9 +16,9 @@ namespace TPVproyecto.ViewModels.PagPedidos
     {
         private NavigationStore _navigationStore;
         private readonly PedidosService _pedidoService;
+        private readonly HeladoService _heladoService;
         private readonly LineasPedidoService _lineasPedidoService;
         public PaginacionHelper<Pedido> PaginacionHelper;
-
         public ElegirVM ElegirVM_Main { get; set; }
 
         private string _searchQuery;
@@ -76,6 +77,7 @@ namespace TPVproyecto.ViewModels.PagPedidos
         public PedidosVM(NavigationStore navigationStore, InicioVM inicioVM)
         {
             _navigationStore = navigationStore;
+            _heladoService = new HeladoService();
             _pedidoService = new PedidosService();
             _lineasPedidoService = new LineasPedidoService();
 
@@ -85,7 +87,13 @@ namespace TPVproyecto.ViewModels.PagPedidos
             _lineasPedido = new ObservableCollection<LineaPedido>();
 
             ElegirVM_Main = inicioVM.ElegirVM_Main;
-
+            ElegirVM_Main.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == "ToppingSeleccionado") // Cuando se finaliza la selección del helado
+                {
+                    AgregarHeladoAPedido();
+                }
+            };
 
             Anterior = new RelayCommand(
                 execute: EjecutarAnterior,
@@ -128,6 +136,9 @@ namespace TPVproyecto.ViewModels.PagPedidos
             {
                 PedidoSeleccionado = pedido;
                 CargarLineasPedido(pedido);
+
+                // Agregar el helado al pedido seleccionado
+                AgregarHeladoAPedido();
             }
         }
 
@@ -165,5 +176,42 @@ namespace TPVproyecto.ViewModels.PagPedidos
 
         public bool PuedeEjecutarSiguiente(object parameter) => PaginacionHelper.ActualPagina < PaginacionHelper.TotalPages;
         public bool PuedeEjecutarAnterior(object parameter) => PaginacionHelper.ActualPagina > 1;
+
+        private void AgregarHeladoAPedido()
+        {
+            if (PedidoSeleccionado != null && ElegirVM_Main.ToppingSeleccionado != null)
+            {
+                var nuevoHelado = new Helado
+                {
+                    TipoH = ElegirVM_Main.TipoSeleccionado,
+                    TamanyoH = ElegirVM_Main.TamanyoSeleccionado,
+                    SaboresH = ElegirVM_Main.SaborSeleccionado,
+                    ToppingsH = ElegirVM_Main.ToppingSeleccionado
+                };
+
+                var nuevaLinea = new LineaPedido
+                {
+                    ID_Pedido = PedidoSeleccionado.ID_Pedido,
+                    Tipo = nuevoHelado.TipoH,
+                    Tamanyo = nuevoHelado.TamanyoH,
+                    Sabor = nuevoHelado.SaboresH,
+                    Topping = nuevoHelado.ToppingsH,
+                    Subtotal = CalcularSubtotal(nuevoHelado)
+                };
+
+                LineasPedido.Add(nuevaLinea); // En vez de PedidoSeleccionado.LineasPedido.Add(...)
+                PedidoSeleccionado.Total += nuevaLinea.Subtotal;
+                _heladoService.AgregarHeladoAPedido(nuevaLinea.ID_Pedido, nuevaLinea.Tipo.Id, nuevaLinea.Tamanyo.Id, nuevaLinea.Sabor.Id, nuevaLinea.Topping.Id);
+
+            }
+        }
+
+
+        private decimal CalcularSubtotal(Helado helado)
+        {
+            return helado.TamanyoH.Precio + helado.ToppingsH.PrecioPlus;
+        }
+
+
     }
 }

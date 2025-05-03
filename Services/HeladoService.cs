@@ -110,10 +110,46 @@ namespace TPVproyecto.Services
         }
 
 
+        public void AgregarHeladoAPedido(int idPedido, int idTipo, int idTamanyo, int idSabor, int idTopping)
+        {
+            try
+            {
+                using (var contexto = new DBContexto())
+                {
+                    // Buscar el pedido existente con sus líneas de pedido
+                    var pedido = contexto.Pedido
+                        .Include(p => p.LineasPedido)
+                        .FirstOrDefault(p => p.ID_Pedido == idPedido);
 
+                    if (pedido == null)
+                    {
+                        throw new Exception("El pedido no existe.");
+                    }
 
+                    // Crear la nueva línea de pedido con los IDs proporcionados
+                    var nuevaLinea = new LineaPedido
+                    {
+                        ID_Pedido = idPedido,
+                        ID_Tipo = idTipo,
+                        ID_Tamanyo = idTamanyo,
+                        ID_Sabor = idSabor,
+                        ID_Topping = idTopping,
+                        Subtotal = contexto.Tamanyo.Where(t => t.Id == idTamanyo).Select(t => t.Precio).FirstOrDefault()
+                                 + contexto.Topping.Where(t => t.Id == idTopping).Select(t => t.PrecioPlus).FirstOrDefault()
+                    };
 
+                    // Agregar la nueva línea de pedido y actualizar el total del pedido
+                    pedido.LineasPedido.Add(nuevaLinea);
+                    pedido.Total += nuevaLinea.Subtotal;
 
+                    contexto.SaveChanges(); // Guardar cambios en la base de datos
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al agregar el helado al pedido: {ex.Message}");
+            }
+        }
 
     }
 }

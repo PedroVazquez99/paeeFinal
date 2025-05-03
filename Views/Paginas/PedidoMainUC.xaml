@@ -57,12 +57,14 @@
         <ucE:ElegirUC DataContext="{Binding ElegirVM_Main}" Grid.Row="1" Grid.Column="1"  Margin="10,10,10,10" ></ucE:ElegirUC>
 
         <!-- LÍNEAS DE PEDIDO (SE MANTIENE IGUAL) -->
-        <ListBox ItemsSource="{Binding LineasPedido}" Grid.Row="3" Grid.ColumnSpan="2">
+        <ListBox ItemsSource="{Binding LineasPedido}" Grid.Row="3">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding ID}" FontWeight="Bold" Margin="5"/>
                         <TextBlock Text="{Binding Tipo.NombreTipo}" Margin="5"/>
+                        <TextBlock Text="{Binding Tamanyo.NombreTamanyo}" Margin="5"/>
+                        <TextBlock Text="{Binding Sabor.SaborNombre}" Margin="5"/>
+                        <TextBlock Text="{Binding Topping.ToppingNombre}" Margin="5" />
                         <TextBlock Text="{Binding Subtotal}" Margin="5"/>
                     </StackPanel>
                 </DataTemplate>
