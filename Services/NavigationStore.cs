@@ -12,11 +12,18 @@ namespace TPVproyecto.Services
         public event Action CurrentViewModelChanged;
 
         private BaseVM _currentViewModel;
+        private Stack<BaseVM> _navigationHistory = new Stack<BaseVM>(); // 🔄 Historial de navegación
 
-        public BaseVM CurrentViewModel { 
-            get => _currentViewModel; 
-            set 
-            { 
+        public BaseVM CurrentViewModel
+        {
+            get => _currentViewModel;
+            set
+            {
+                if (_currentViewModel != null)
+                {
+                    _navigationHistory.Push(_currentViewModel); // 🔄 Guarda el actual antes de cambiar
+                }
+
                 _currentViewModel = value;
                 OnCurrentViewModelChanged();
             }
@@ -27,5 +34,14 @@ namespace TPVproyecto.Services
             CurrentViewModelChanged?.Invoke();
         }
 
+        // 🔙 Método para volver atrás
+        public void NavigateBack()
+        {
+            if (_navigationHistory.Count > 0)
+            {
+                _currentViewModel = _navigationHistory.Pop(); // 🔄 Recupera el último ViewModel
+                OnCurrentViewModelChanged();
+            }
+        }
     }
 }

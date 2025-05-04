@@ -36,6 +36,7 @@
             <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
 
+        <Button Grid.Row="0" Margin="12" Content="Volver" Command="{Binding VolverCommand}"></Button>
         <Button Grid.Row="1" Content="Tipos" Command="{Binding TipoCommand}"></Button>
         <Button Grid.Row="2" Content="Tamaños" Command="{Binding TamanyoCommand}"></Button>
         <Button Grid.Row="3" Content="Sabores" Command="{Binding SaborCommand}"></Button>

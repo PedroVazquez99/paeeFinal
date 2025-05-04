@@ -25,6 +25,8 @@ namespace TPVproyecto.ViewModels.Admin
         public AdminVM(NavigationStore navigationStore) {
             _navigationStore = navigationStore;
 
+            VolverCommand = new VolverCommand(navigationStore); // Boton de Volver (Atras)
+
             TipoCommand = new RelayCommand(TipoAdmin);
             TamanyoCommand = new RelayCommand(TamanyoAdmin);
             SaborCommand = new RelayCommand(SaborAdmin);
@@ -38,6 +40,7 @@ namespace TPVproyecto.ViewModels.Admin
         public ICommand TipoCommand { get; set; }
         public ICommand TamanyoCommand { get; set; }
         public ICommand SaborCommand { get; set; }
+        public ICommand VolverCommand { get; set; }
 
         // Vistas
         private void TipoAdmin(object obj) => CurrentViewAdmin = new TipoHAdminVM();

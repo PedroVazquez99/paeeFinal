@@ -31,8 +31,8 @@ namespace TPVproyecto.ViewModels
 
         // CONTRUCTOR
         public InicioVM(NavigationStore navigationStore) {
-            
-            
+
+            _navigationStore = navigationStore;
             helados = new ObservableCollection<Helado>();
             // helados.Add(new Helado(0, new Tipo(), new Tamanyo(), sabor, new Topping()));
             ElegirVM_Main = new ElegirVM(this);
@@ -49,7 +49,7 @@ namespace TPVproyecto.ViewModels
                 }
             };
 
-            AdminCommand = new NavCommand<AdminVM>(navigationStore, () => new AdminVM(navigationStore));
+            AdminCommand = new NavCommand<AdminVM>(navigationStore, () => new AdminVM(navigationStore)); // empleo el objeto navigationStore
             CuentasCommand = new NavCommand<PedidosVM>(navigationStore, () => new PedidosVM(navigationStore, this));
         }
 
