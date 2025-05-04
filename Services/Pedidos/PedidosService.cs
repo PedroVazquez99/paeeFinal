@@ -54,6 +54,16 @@ namespace TPVproyecto.Services.Pedidos
 
                     // Guardar cambios en la base de datos
                     _context.Pedido.UpdateRange(pedidosMesa);
+
+                    // 🔄 Actualizar el estado de la mesa
+                    var mesa = _context.Mesa.FirstOrDefault(m => m.Id == idMesa);
+                    if (mesa != null)
+                    {
+                        mesa.IsActivo = false; // Desactivar la mesa
+                        _context.Mesa.Update(mesa); // Guardar cambios en la mesa
+                    }
+
+
                     _context.SaveChanges();
 
                     // MessageBox.Show($"Se han actualizado {pedidosMesa.Count} pedidos de la mesa {idMesa}.", "Éxito");

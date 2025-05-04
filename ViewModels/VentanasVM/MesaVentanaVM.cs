@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MigraDoc.DocumentObjectModel.Internals;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TPVproyecto.Commands;
+using TPVproyecto.Helpers;
 using TPVproyecto.Models;
 using TPVproyecto.Services;
 
@@ -47,8 +49,14 @@ namespace TPVproyecto.ViewModels.VentanasVM
         public ICommand MiComando { get; }
         public ICommand AceptarCommand { get; }
 
+        // Variables Globales
+        Config config;
+
         // CONSTRUCTOR
         public MesaVentanaVM(ObservableCollection<Helado> heladosList) {
+
+            config = Config.GetInstance();
+
             _mesaService = new MesaService();
             _heladoService = new HeladoService();
             _heladosList = heladosList;
@@ -71,6 +79,7 @@ namespace TPVproyecto.ViewModels.VentanasVM
         private void EjecutarComando(object parameter)
         {
             _mesaSeleccionada = (Mesa)parameter;
+            config.idMesaSeleccionada = MesaSeleccionada.Id;
             Console.WriteLine(_mesaSeleccionada);
         }
 
@@ -90,6 +99,7 @@ namespace TPVproyecto.ViewModels.VentanasVM
                     bool isMesaActivo = true;
                     _heladoService.guardarHelado(_heladosList, MesaSeleccionada);
                     _mesaService.cambiarEstadoMesa(MesaSeleccionada.Id, isMesaActivo);
+                    config.idMesaSeleccionada = MesaSeleccionada.Id;
 
                     _heladosList.Clear();
 

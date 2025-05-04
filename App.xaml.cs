@@ -2,6 +2,7 @@
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using TPVproyecto.Helpers;
 using TPVproyecto.Services;
 using TPVproyecto.ViewModels;
 
@@ -52,6 +53,10 @@ namespace TPVproyecto
             MainWindow.Show();
 
             base.OnStartup(e);
+
+            Config config = Config.GetInstance();
+            config.lang = "es";
+            config.idMesaSeleccionada = -1;
         }
 
     }

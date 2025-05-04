@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TPVproyecto.Commands;
+using TPVproyecto.Helpers;
 using TPVproyecto.Models;
 using TPVproyecto.Services.Pedidos;
 
@@ -66,8 +67,13 @@ namespace TPVproyecto.ViewModels.VentanasVM
         // SERVICIOS
         private PedidosService _pedidosService;
 
+        Config config;
+
         // CONTRUCTOR
         public PagarVM(decimal total, ObservableCollection<Helado> helados) {
+
+            config = Config.GetInstance();
+
             _total = total;
             _helados = helados;
 
@@ -93,7 +99,9 @@ namespace TPVproyecto.ViewModels.VentanasVM
         {
             if(_cambio >= 0)
             {
-                _pedidosService.CompletarPedido(2);
+                Console.WriteLine(parameter);
+                int x = config.idMesaSeleccionada;
+                _pedidosService.CompletarPedido(x);
                 _helados.Clear();
                 CerrarVentanaAction.Invoke(); // Cerramos la ventana
 
