@@ -48,7 +48,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
 
             <!--Precio Pedido-->
-            <TextBlock Text="{Binding Total, StringFormat='{}{0:0.00} €'}" Width="200" FontSize="36" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <TextBlock Text="{Binding Total, StringFormat='{}{0:0.00} €'}" Width="Auto" FontSize="36" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,20,0"/>
             
             <!--Boton RESET-->
             <Button Height="40" Width="100"
