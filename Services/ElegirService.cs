@@ -133,7 +133,7 @@ namespace TPVproyecto.Services
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings["SQLMicrosoft"]))
             {
                 connection.Open();
-                string query = "SELECT id, toppingNombre FROM Topping";
+                string query = "SELECT id, toppingNombre, precioPlus FROM Topping";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -144,7 +144,8 @@ namespace TPVproyecto.Services
                             Topping toppingBBDD = new Topping
                             {
                                 Id = (int)reader.GetInt32(0), // Columna Id
-                                ToppingNombre = reader.GetString(1) // Columna Nombre
+                                ToppingNombre = reader.GetString(1), // Columna Nombre
+                                PrecioPlus = reader.GetDecimal(2)
 
                             };
                             toppings.Add(toppingBBDD);

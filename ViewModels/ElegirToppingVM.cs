@@ -1,33 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TPVproyecto.Commands;
 using TPVproyecto.Models;
-using TPVproyecto.Services;
 
 namespace TPVproyecto.ViewModels
 {
     public class ElegirToppingVM : BaseVM
     {
+        public ElegirVM _mainViewModel; // Referencia al ViewModel padre
 
-        public ObservableCollection<Topping> Toppings { get; set; } // Obtengo los tipos de la BBDD
-        public Topping SelectedTopping { get; set; } // Tipo elegido
-        private ElegirService _dataService { get; set; }
+        public ObservableCollection<Topping> ToppingsVisibles => _mainViewModel.ToppingsVisibles; // Recibe los elementos paginados
 
-        public ElegirVM _mainViewModel; // ViewModel de la clase contenedora
+        public ICommand SeleccionarCommand { get; }
 
-        // COMMANDS
-        public ICommand SeleccionarCommand { get; set; }
-
-        public ElegirToppingVM(ElegirVM elegirViewModel) {
-            _mainViewModel = elegirViewModel;
-            _dataService = new ElegirService();
-            Toppings = new ObservableCollection<Topping>(_dataService.obtenerToppings());
-            SeleccionarCommand = new ElegirCommand(_mainViewModel); // COMANDO
+        public ElegirToppingVM(ElegirVM mainViewModel)
+        {
+            _mainViewModel = mainViewModel;
+            SeleccionarCommand = new RelayCommand(obj => _mainViewModel.SeleccionarElemento(obj));
         }
     }
 }

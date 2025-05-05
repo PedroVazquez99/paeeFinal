@@ -8,8 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <StackPanel>
-            <!-- Iterar sobre la lista de tipos y crear un botón por cada tipo -->
-            <ItemsControl ItemsSource="{Binding Toppings}">
+            <ItemsControl ItemsSource="{Binding ToppingsVisibles}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Content="{Binding ToppingNombre}" 
