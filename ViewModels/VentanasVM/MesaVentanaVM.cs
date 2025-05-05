@@ -98,7 +98,10 @@ namespace TPVproyecto.ViewModels.VentanasVM
                 {
                     bool isMesaActivo = true;
                     _heladoService.guardarHelado(_heladosList, MesaSeleccionada);
-                    _mesaService.cambiarEstadoMesa(MesaSeleccionada.Id, isMesaActivo);
+                    if(MesaSeleccionada.Id > 1)
+                    {
+                        _mesaService.cambiarEstadoMesa(MesaSeleccionada.Id, isMesaActivo); // No se ccambia el estado de la mesa LLEVAR, es decir, siempre esta activada
+                    }
                     config.idMesaSeleccionada = MesaSeleccionada.Id;
 
                     _heladosList.Clear();
