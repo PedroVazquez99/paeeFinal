@@ -48,7 +48,8 @@ namespace TPVproyecto.ViewModels
         // Commands
         public ICommand BorrarHeladoCommand { get; }
         public ICommand MesaSelectCommand { get; } 
-        public ICommand PagarSelectCommand { get; set; } 
+        public ICommand PagarSelectCommand { get; set; }
+        public ICommand ResetCommand { get; set; }
 
         private InicioVM _mainViewModel;
 
@@ -64,6 +65,7 @@ namespace TPVproyecto.ViewModels
 
             MesaSelectCommand = new MesaSelectCommand(_mainViewModel.helados);
             PagarSelectCommand = new PagarSelectCommand(Total, mainViewModel.helados);
+            ResetCommand = new RelayCommand(_ => ResetearLista());
 
             _helados.CollectionChanged += (s, e) =>
             {
@@ -79,6 +81,8 @@ namespace TPVproyecto.ViewModels
                 }
             };
 
+            
+
 
         }
 
@@ -92,6 +96,12 @@ namespace TPVproyecto.ViewModels
             }
         }
 
+        public void ResetearLista()
+        {
+            _helados.Clear();
+            OnPropertyChanged(nameof(Helados));
+            OnPropertyChanged(nameof(Total)); // Actualizar el total a 0
+        }
 
     }
 

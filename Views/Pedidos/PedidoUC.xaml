@@ -46,7 +46,12 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
-            <TextBlock Text="{Binding Total, StringFormat='0.00'}" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,20,0"/>
+
+            <TextBlock Text="{Binding Total, StringFormat='0.00'}" Width="80" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <Button Height="40" Width="100"
+                Content="Limpiar"
+                Command="{Binding ResetCommand}"
+                Background="#FFFF6060" Foreground="White" Margin="0,0,10,0" Grid.Row="1"/>
             <Button Height="40" Width="100" 
                     Content="Mesa" 
                     Command="{Binding MesaSelectCommand}"
@@ -56,6 +61,7 @@
                     Content="Pagar" 
                     Command="{Binding PagarSelectCommand}" Margin="10,0,10,0" 
                     />
+
         </StackPanel>
     </Grid>
 </UserControl>
