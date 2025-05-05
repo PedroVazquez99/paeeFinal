@@ -8,8 +8,7 @@
              d:DesignHeight="250" d:DesignWidth="300">
     <Grid Background="#FF845555" Margin="10">
         <StackPanel>
-            <!-- Iterar sobre la lista de tipos y crear un botón por cada tipo -->
-            <ItemsControl ItemsSource="{Binding Tipos}">
+            <ItemsControl ItemsSource="{Binding TiposVisibles}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Content="{Binding NombreTipo}" 
@@ -18,7 +17,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            
         </StackPanel>
     </Grid>
 </UserControl>

@@ -7,17 +7,18 @@
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="300" Background="#FF12607B">
     <Grid>
-        
         <Grid.RowDefinitions>
-            <RowDefinition Height="5*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
+        <!-- Vista dinámica -->
         <ContentControl Content="{Binding CurrentViewModel}"/>
-        <Button Content="Aceptar" Command="{Binding AceptarElegir}"
-                Grid.Row="1" Width="Auto" Padding="20, 10"
-                VerticalAlignment="Center" 
-                HorizontalAlignment="Right"
-                Margin="0,0,10,0"></Button>
+
+        <!-- Paginación -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
+            <Button Content="Anterior" Command="{Binding AnteriorPaginaCommand}" Width="100"/>
+            <Button Content="Siguiente" Command="{Binding SiguientePaginaCommand}" Width="100"/>
+        </StackPanel>
     </Grid>
 </UserControl>

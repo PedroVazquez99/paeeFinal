@@ -27,18 +27,18 @@ namespace TPVproyecto.Commands
                 case Tipo tipo:
 
                     // base.CanExecute(true);
-                    _elegirVM.SeleccionarTipoH(tipo);
+                    _elegirVM.SeleccionarElemento(tipo);
                     break;
 
                 case Tamanyo tamanyo:
-                    _elegirVM.SeleccionarTamanyoH(tamanyo);
+                    _elegirVM.SeleccionarElemento(tamanyo);
                     break;
 
                 case Sabor sabor:
-                    _elegirVM.SeleccionarSaborH(sabor);
+                    _elegirVM.SeleccionarElemento(sabor);
                     break;
                 case Topping topping:
-                    _elegirVM.SeleccionarToppingH(topping);
+                    _elegirVM.SeleccionarElemento(topping);
                     break;
 
             }

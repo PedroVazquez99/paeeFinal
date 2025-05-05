@@ -1,22 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TPVproyecto.Commands;
 using TPVproyecto.Helpers;
-using TPVproyecto.Interfaces;
 using TPVproyecto.Models;
-using TPVproyecto.ViewModels;
+using TPVproyecto.Services;
 
 namespace TPVproyecto.ViewModels
 {
     public class ElegirVM : BaseVM
     {
-        // Navegacion
+        private readonly ElegirService _dataService;
+
+        // Paginación para cada categoría
+        private readonly PaginacionHelper<Tipo> _paginacionTipos;
+        private readonly PaginacionHelper<Tamanyo> _paginacionTamanyos;
+        private readonly PaginacionHelper<Sabor> _paginacionSabores;
+        private readonly PaginacionHelper<Topping> _paginacionToppings;
+
+        // Colecciones visibles
+        public ObservableCollection<Tipo> TiposVisibles { get; private set; }
+        public ObservableCollection<Tamanyo> TamanyosVisibles { get; private set; }
+        public ObservableCollection<Sabor> SaboresVisibles { get; private set; }
+        public ObservableCollection<Topping> ToppingsVisibles { get; private set; }
+
+        // Propiedades seleccionadas
+        public Tipo TipoSeleccionado { get; set; }
+        public Tamanyo TamanyoSeleccionado { get; set; }
+        public Sabor SaborSeleccionado { get; set; }
+        public Topping ToppingSeleccionado { get; set; }
+
+        // Vista actual
         private BaseVM _currentViewModel;
         public BaseVM CurrentViewModel
         {
@@ -25,116 +38,173 @@ namespace TPVproyecto.ViewModels
             {
                 _currentViewModel = value;
                 OnPropertyChanged(nameof(CurrentViewModel));
-            }
-        }
-        
-        public ICommand AceptarElegir { get; }
-
-        // Popiedades
-        private Tipo _tipoSeleccionado;
-        public Tipo TipoSeleccionado { 
-            get => _tipoSeleccionado;
-            set 
-            {
-                _tipoSeleccionado = value;
-                OnPropertyChanged(nameof(TipoSeleccionado));
-            } 
-        }
-
-        private Tamanyo _tamanyoSeleccionado;
-        public Tamanyo TamanyoSeleccionado
-        {
-            get => _tamanyoSeleccionado;
-            set
-            {
-                _tamanyoSeleccionado = value;
-                OnPropertyChanged(nameof(TamanyoSeleccionado));
+                ActualizarElementosVisibles();
             }
         }
 
-        private Sabor _saborSeleccionado;
-        public Sabor SaborSeleccionado
+        // Comandos de navegación y selección
+        public ICommand SiguientePaginaCommand { get; }
+        public ICommand AnteriorPaginaCommand { get; }
+        public ICommand SeleccionarElementoCommand { get; }
+
+        InicioVM _mainVM { get; set; }
+
+        public ElegirVM(InicioVM mainVM)
         {
-            get => _saborSeleccionado;
-            set
+            _dataService = new ElegirService();
+
+            var tipos = _dataService.obtenerTipos();
+            var tamanyos = _dataService.obtenerTamanyos();
+            var sabores = _dataService.obtenerSabores();
+            var toppings = _dataService.obtenerToppings();
+
+            // Inicializar paginación
+            _paginacionTipos = new PaginacionHelper<Tipo>(tipos, 5);
+            _paginacionTamanyos = new PaginacionHelper<Tamanyo>(tamanyos, 5);
+            _paginacionSabores = new PaginacionHelper<Sabor>(sabores, 5);
+            _paginacionToppings = new PaginacionHelper<Topping>(toppings, 5);
+
+            // Inicializar listas visibles
+            TiposVisibles = new ObservableCollection<Tipo>(_paginacionTipos.getPaginaActualElementos());
+            TamanyosVisibles = new ObservableCollection<Tamanyo>(_paginacionTamanyos.getPaginaActualElementos());
+            SaboresVisibles = new ObservableCollection<Sabor>(_paginacionSabores.getPaginaActualElementos());
+            ToppingsVisibles = new ObservableCollection<Topping>(_paginacionToppings.getPaginaActualElementos());
+
+            // Comandos de navegación y selección
+            SiguientePaginaCommand = new RelayCommand(_ => CambiarPagina(true));
+            AnteriorPaginaCommand = new RelayCommand(_ => CambiarPagina(false));
+            SeleccionarElementoCommand = new RelayCommand(obj => SeleccionarElemento(obj));
+
+            // Vista inicial
+            CurrentViewModel = new ElegirTipoVM(this);
+            _mainVM = mainVM;
+        }
+
+        private void CambiarPagina(bool siguiente)
+        {
+            switch (CurrentViewModel)
             {
-                _saborSeleccionado = value;
-                OnPropertyChanged(nameof(SaborSeleccionado));
+                case ElegirTipoVM:
+                    if (siguiente) _paginacionTipos.siguientePag();
+                    else _paginacionTipos.anteriorPag();
+
+                    TiposVisibles.Clear();
+                    foreach (var item in _paginacionTipos.getPaginaActualElementos())
+                        TiposVisibles.Add(item);
+
+                    OnPropertyChanged(nameof(TiposVisibles));
+                    break;
+
+                case ElegirTamanyoVM:
+                    if (siguiente) _paginacionTamanyos.siguientePag();
+                    else _paginacionTamanyos.anteriorPag();
+
+                    TamanyosVisibles.Clear();
+                    foreach (var item in _paginacionTamanyos.getPaginaActualElementos())
+                        TamanyosVisibles.Add(item);
+
+                    OnPropertyChanged(nameof(TamanyosVisibles));
+                    break;
+
+                case ElegirSaborVM:
+                    if (siguiente) _paginacionSabores.siguientePag();
+                    else _paginacionSabores.anteriorPag();
+
+                    SaboresVisibles.Clear();
+                    foreach (var item in _paginacionSabores.getPaginaActualElementos())
+                        SaboresVisibles.Add(item);
+
+                    OnPropertyChanged(nameof(SaboresVisibles));
+                    break;
+
+                case ElegirToppingVM:
+                    if (siguiente) _paginacionToppings.siguientePag();
+                    else _paginacionToppings.anteriorPag();
+
+                    ToppingsVisibles.Clear();
+                    foreach (var item in _paginacionToppings.getPaginaActualElementos())
+                        ToppingsVisibles.Add(item);
+
+                    OnPropertyChanged(nameof(ToppingsVisibles));
+                    break;
             }
         }
 
-        private Topping _toppingSeleccionado;
-        public Topping ToppingSeleccionado
+
+        public void SeleccionarElemento(object elemento)
         {
-            get => _toppingSeleccionado;
-            set
+            if (elemento is Tipo tipo)
             {
-                _toppingSeleccionado = value;
-                OnPropertyChanged(nameof(ToppingSeleccionado));
+                TipoSeleccionado = tipo;
+                CurrentViewModel = new ElegirTamanyoVM(this);
+            }
+            else if (elemento is Tamanyo tamanyo)
+            {
+                TamanyoSeleccionado = tamanyo;
+                CurrentViewModel = new ElegirSaborVM(this);
+            }
+            else if (elemento is Sabor sabor)
+            {
+                SaborSeleccionado = sabor;
+                CurrentViewModel = new ElegirToppingVM(this);
+            }
+            else if (elemento is Topping topping)
+            {
+                ToppingSeleccionado = topping;
+                AgregarHelado();
+            }
+
+            OnPropertyChanged(nameof(CurrentViewModel));
+        }
+
+        private void AgregarHelado()
+        {
+            var nuevoHelado = new Helado
+            {
+                TipoH = TipoSeleccionado,
+                TamanyoH = TamanyoSeleccionado,
+                SaboresH = SaborSeleccionado,
+                ToppingsH = ToppingSeleccionado
+            };
+
+            // Guardar el helado en la aplicación
+            // Aquí puedes llamar a un método de la VM principal
+            _mainVM.agregarHelado(nuevoHelado);
+            // Reiniciar selección
+            TipoSeleccionado = null;
+            TamanyoSeleccionado = null;
+            SaborSeleccionado = null;
+            ToppingSeleccionado = null;
+            CurrentViewModel = new ElegirTipoVM(this);
+        }
+
+        private void ActualizarElementosVisibles()
+        {
+            switch (CurrentViewModel)
+            {
+                case ElegirTipoVM:
+                    TiposVisibles = new ObservableCollection<Tipo>(_paginacionTipos.getPaginaActualElementos());
+                    OnPropertyChanged(nameof(TiposVisibles));
+                    break;
+
+                case ElegirTamanyoVM:
+                    TamanyosVisibles = new ObservableCollection<Tamanyo>(_paginacionTamanyos.getPaginaActualElementos());
+                    OnPropertyChanged(nameof(TamanyosVisibles));
+                    break;
+
+                case ElegirSaborVM:
+                    SaboresVisibles = new ObservableCollection<Sabor>(_paginacionSabores.getPaginaActualElementos());
+                    OnPropertyChanged(nameof(SaboresVisibles));
+                    break;
+
+                case ElegirToppingVM:
+                    ToppingsVisibles = new ObservableCollection<Topping>(_paginacionToppings.getPaginaActualElementos());
+                    OnPropertyChanged(nameof(ToppingsVisibles));
+                    break;
             }
         }
 
-        // Info mostrar
-        private readonly BaseVM _tiposViewModel;
-        private readonly BaseVM _tamanosViewModel;
-        private readonly BaseVM _saboresViewModel;
-        private readonly BaseVM _toppingsViewModel;
 
-        private InicioVM _mainWindowVM;
-
-        // CONTRUCTOR
-        public ElegirVM(InicioVM mainWindowVM) {
-
-            _mainWindowVM = mainWindowVM;
-            _tiposViewModel = new ElegirTipoVM(this);
-            _tamanosViewModel = new ElegirTamanyoVM(this);
-            _saboresViewModel = new ElegirSaborVM(this);
-            _toppingsViewModel = new ElegirToppingVM(this);
-
-            
-            
-            AceptarElegir = new AceptarElegirCommand(_mainWindowVM, _tipoSeleccionado);
-
-            CurrentViewModel = _tiposViewModel;
-        }
-
-
-        // METODOS
-        public void SeleccionarTipoH(Tipo tipo) // Al hacer click en un TIPO
-        {
-            TipoSeleccionado = tipo;
-            CurrentViewModel = _tamanosViewModel;
-        }
-
-        public void SeleccionarTamanyoH(Tamanyo tamanyo) // Al hacer click en un tamanyo
-        {
-            TamanyoSeleccionado = tamanyo;
-            CurrentViewModel = _saboresViewModel;
-        }
-
-        public void SeleccionarSaborH(Sabor sabor) // Al hacer click en un Sabor
-        {
-           SaborSeleccionado = sabor;
-           CurrentViewModel = _toppingsViewModel;
-        }
-
-        public void SeleccionarToppingH(Topping topping) // Al hacer click en un Topping
-        {
-            ToppingSeleccionado = topping;
-            Helado nuevoHelado = new Helado();
-            nuevoHelado.TipoH = TipoSeleccionado;
-            nuevoHelado.TamanyoH = TamanyoSeleccionado;
-            nuevoHelado.SaboresH = SaborSeleccionado;
-            nuevoHelado.ToppingsH = ToppingSeleccionado;
-            agregarHelado(nuevoHelado);
-            
-            CurrentViewModel = _tiposViewModel;
-        }
-
-        public void agregarHelado(Helado nuevoHelado)
-        {
-            _mainWindowVM.agregarHelado(nuevoHelado);
-        }
 
     }
 }
