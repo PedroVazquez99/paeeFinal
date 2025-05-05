@@ -59,10 +59,10 @@ namespace TPVproyecto.ViewModels
             var toppings = _dataService.obtenerToppings();
 
             // Inicializar paginación
-            _paginacionTipos = new PaginacionHelper<Tipo>(tipos, 5);
-            _paginacionTamanyos = new PaginacionHelper<Tamanyo>(tamanyos, 5);
-            _paginacionSabores = new PaginacionHelper<Sabor>(sabores, 5);
-            _paginacionToppings = new PaginacionHelper<Topping>(toppings, 5);
+            _paginacionTipos = new PaginacionHelper<Tipo>(tipos, 6);
+            _paginacionTamanyos = new PaginacionHelper<Tamanyo>(tamanyos, 6);
+            _paginacionSabores = new PaginacionHelper<Sabor>(sabores, 6);
+            _paginacionToppings = new PaginacionHelper<Topping>(toppings, 6);
 
             // Inicializar listas visibles
             TiposVisibles = new ObservableCollection<Tipo>(_paginacionTipos.getPaginaActualElementos());
