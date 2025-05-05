@@ -9,6 +9,8 @@ using TPVproyecto.Models;
 using TPVproyecto.Models.Pedido;
 using TPVproyecto.Services;
 using TPVproyecto.Services.Pedidos;
+using TPVproyecto.ViewModels.VentanasVM;
+using TPVproyecto.Views.Ventanas;
 
 namespace TPVproyecto.ViewModels.PagPedidos
 {
@@ -39,6 +41,7 @@ namespace TPVproyecto.ViewModels.PagPedidos
         public ICommand Anterior { get; set; }
         public ICommand Siguiente { get; set; }
         public ICommand SeleccionarPedidoCommand { get; set; }
+        public ICommand BorrarPedidoCommand { get; set; }
 
         private Pedido _pedidoSeleccionado;
         public Pedido PedidoSeleccionado
@@ -110,6 +113,11 @@ namespace TPVproyecto.ViewModels.PagPedidos
                 canExecute: PuedeEjecutarSeleccionarPedido
             );
 
+            BorrarPedidoCommand = new RelayCommand(
+                execute: EjecutarAbrirVentanaBorrarPedido,
+                canExecute: PuedeAbrirVentanaBorrarPedido
+            );
+
         }
 
         private void EjecutarAnterior(object parameter)
@@ -139,7 +147,23 @@ namespace TPVproyecto.ViewModels.PagPedidos
 
                 // Agregar el helado al pedido seleccionado
                 AgregarHeladoAPedido();
+
             }
+        }
+
+        private void EjecutarAbrirVentanaBorrarPedido(object parameter)
+        {
+            var x = new BorrarPedidoWindow(PedidoSeleccionado.ID_Pedido);
+            x.Show();
+        }
+
+        private bool PuedeAbrirVentanaBorrarPedido(object parameter)
+        {
+            //if(PedidoSeleccionado != null && PedidoSeleccionado.ID_Pedido > 0)
+            //{
+            //    return true;
+            //}
+            return true;
         }
 
         private bool PuedeEjecutarSeleccionarPedido(object parameter)

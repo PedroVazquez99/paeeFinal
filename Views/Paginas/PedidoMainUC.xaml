@@ -39,8 +39,7 @@
                             <TextBlock Text="{Binding ID_Pedido}" FontWeight="Bold" Margin="5" />
                             <TextBlock Text="{Binding Mesa.NombreMesa}" Margin="5" />
                             <TextBlock Text="{Binding Total}" Margin="5" />
-                            <Button Content="Detalles" Command="{Binding DataContext.SeleccionarPedidoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Margin="5"/>
-                            <Button Content="Borrar" Margin="5"/>
+                            <Button Content="Borrar" Margin="5" Command="{Binding DataContext.BorrarPedidoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

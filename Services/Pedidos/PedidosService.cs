@@ -78,5 +78,37 @@ namespace TPVproyecto.Services.Pedidos
                 MessageBox.Show("No se pudo actualizar los pedidos de la mesa.", "Error");
             }
         }
+
+
+        // Eliminar un pedido de la base de datos por su ID
+        public async Task EliminarPedido(int idPedido)
+        {
+            try
+            {
+                var lineasPedido = _context.Lineas_Pedido.Where(lp => lp.ID_Pedido == idPedido);
+
+                _context.Lineas_Pedido.RemoveRange(lineasPedido); // Elimina las líneas asociadas
+                await _context.SaveChangesAsync(); // Guarda cambios antes de eliminar el pedido
+
+                // Buscar el pedido en la base de datos
+                var pedido = _context.Pedido.FirstOrDefault(p => p.ID_Pedido == idPedido);
+
+                if (pedido != null)
+                {
+                    _context.Pedido.Remove(pedido);
+                    await _context.SaveChangesAsync();
+                    // MessageBox.Show($"Pedido {idPedido} eliminado correctamente.", "Éxito");
+                }
+                else
+                {
+                    MessageBox.Show($"No se encontró el pedido con ID {idPedido}.", "Aviso");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar el pedido de la base de datos.", "Error");
+            }
+        }
+
     }
 }

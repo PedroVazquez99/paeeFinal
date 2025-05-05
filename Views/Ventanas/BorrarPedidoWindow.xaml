@@ -1,0 +1,29 @@
+﻿<Window x:Class="TPVproyecto.Views.Ventanas.BorrarPedidoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TPVproyecto.Views.Ventanas"
+        mc:Ignorable="d"
+        Title="BorrarPedidoWindow" Height="450" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Mensaje de confirmación -->
+        <TextBlock Text="{Binding MensajeConfirmacion}" 
+                   FontSize="14" FontWeight="Bold" 
+                   HorizontalAlignment="Center" Grid.Row="0"/>
+
+        <!-- Botones -->
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="10">
+            <Button Content="Cancelar" Width="100" Margin="5"
+                    Command="{Binding CancelarCommand}"/>
+            <Button Content="Aceptar" Width="100" Margin="5"
+                    Command="{Binding AceptarBorrarCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>
