@@ -17,7 +17,12 @@ namespace TPVproyecto.ViewModels.Admin
         public object CurrentViewAdmin
         {
             get { return _currentViewAdmin; }
-            set { _currentViewAdmin = value; OnPropertyChanged(nameof(CurrentViewAdmin)); }
+            set { 
+                _currentViewAdmin = value;
+
+                OnPropertyChanged(nameof(CurrentViewAdmin));
+                ((AddCommand)AddCommand).setCurrentView(_currentViewAdmin);
+            }
         }
 
 
@@ -30,6 +35,7 @@ namespace TPVproyecto.ViewModels.Admin
             TipoCommand = new RelayCommand(TipoAdmin);
             TamanyoCommand = new RelayCommand(TamanyoAdmin);
             SaborCommand = new RelayCommand(SaborAdmin);
+            AddCommand = new AddCommand(_currentViewAdmin);
 
             // Pagina de Inicio
             CurrentViewAdmin = new TipoHAdminVM();
@@ -41,6 +47,7 @@ namespace TPVproyecto.ViewModels.Admin
         public ICommand TamanyoCommand { get; set; }
         public ICommand SaborCommand { get; set; }
         public ICommand VolverCommand { get; set; }
+        public ICommand AddCommand { get; set; }
 
         // Vistas
         private void TipoAdmin(object obj) => CurrentViewAdmin = new TipoHAdminVM();

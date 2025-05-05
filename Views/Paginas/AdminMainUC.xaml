@@ -41,6 +41,7 @@
         <Button Grid.Row="2" Content="Tamaños" Command="{Binding TamanyoCommand}"></Button>
         <Button Grid.Row="3" Content="Sabores" Command="{Binding SaborCommand}"></Button>
         <Button Grid.Row="4" Content="Toppinggs" Command="{Binding ToppingCommand}"></Button>
+        <Button Grid.Row="6" Content="Añadir" Margin="15" Height="40" Command="{Binding AddCommand}"></Button>
         
         <ContentControl x:Name="Pages"
                         Content="{Binding CurrentViewAdmin}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4"/>

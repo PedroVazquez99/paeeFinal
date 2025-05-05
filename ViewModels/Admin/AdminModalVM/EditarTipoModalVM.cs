@@ -1,75 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows.Navigation;
+﻿using System.Windows.Input;
 using TPVproyecto.Commands;
 using TPVproyecto.Models;
 using TPVproyecto.Services.Tipos;
+using TPVproyecto.ViewModels;
 
-namespace TPVproyecto.ViewModels.Admin.AdminModalVM
+public class EditarTipoModalVM : BaseVM
 {
-    public class EditarTipoModalVM : BaseVM
+    private readonly AdminTipoService _tipoService;
+
+    private Tipo _tipo;
+    public Tipo Tipo
     {
-        // Dato que se va a modificar en la ventana
-        AdminTipoService _tipoService;
-
-        private Tipo _tipo { get; set; }
-        public Tipo Tipo { 
-            get => _tipo;
-            set
-            {
-                _tipo = value;
-                OnPropertyChanged(nameof(Tipo));
-            }
-        }
-        // Comandos
-        public ICommand GuardarCommand { get; }
-        public ICommand CancelarCommand { get; }
-
-        // Evento
-        public event Action CloseWindowRequested;
-
-        // Constructor
-        public EditarTipoModalVM(Tipo tipo) {
-            _tipo = tipo;
-
-            // Comando para guardar
-            GuardarCommand = new RelayCommand(
-                execute: Guardar,
-                canExecute: PuedeEjecutarGuardar
-             );
-
-            // Comando para cancelar
-            CancelarCommand = new RelayCommand(
-                execute: Cancelar,
-                canExecute: (object parameter) => true
-            );
-
-            _tipoService = new AdminTipoService();
-        }
-
-
-        private void Guardar(object parameter)
+        get => _tipo;
+        set
         {
-            // Lógica para guardar el producto (puedes añadir validación aquí)
-            // Ejemplo: Actualizar en la base de datos
-            _tipoService.guardarTipoBBDD(_tipo);
-            CloseWindowRequested?.Invoke();
+            _tipo = value;
+            OnPropertyChanged(nameof(Tipo));
         }
+    }
 
-        private void Cancelar(object parameter)
-        {
-            // Cierra la ventana sin guardar cambios
-            CloseWindowRequested?.Invoke();
-        }
+    // Nuevo atributo para diferenciar entre crear y editar
+    public bool EsNuevo { get; }
 
-        public bool PuedeEjecutarGuardar(object parameter)
+    // Comandos
+    public ICommand GuardarCommand { get; }
+    public ICommand CancelarCommand { get; }
+
+    // Evento para cerrar la ventana
+    public event Action CloseWindowRequested;
+
+    // Constructor modificado para identificar si es una creación o edición
+    public EditarTipoModalVM(Tipo tipo)
+    {
+        _tipoService = new AdminTipoService();
+
+        EsNuevo = tipo == null; // Si el tipo es nulo, significa que se está creando uno nuevo
+        Tipo = tipo ?? new Tipo(); // Si no hay tipo, inicializamos uno nuevo
+
+        GuardarCommand = new RelayCommand(
+            execute: Guardar,
+            canExecute: PuedeEjecutarGuardar
+        );
+
+        CancelarCommand = new RelayCommand(
+            execute: Cancelar,
+            canExecute: _ => true
+        );
+    }
+
+    private void Guardar(object parameter)
+    {
+        if (EsNuevo)
         {
-            // logica para habilitar el boton de guardar
-            return true;
+            _tipoService.crearTipoBBDD(Tipo); // Método para crear un nuevo tipo
+            
         }
+        else
+        {
+            _tipoService.guardarTipoBBDD(Tipo); // Método para actualizar el tipo existente
+        }
+        
+        CloseWindowRequested?.Invoke();
+    }
+
+    private void Cancelar(object parameter)
+    {
+        CloseWindowRequested?.Invoke();
+    }
+
+    public bool PuedeEjecutarGuardar(object parameter)
+    {
+        // return !string.IsNullOrWhiteSpace(Tipo.NombreTipo); // 🔄 Validar que el nombre no esté vacío
+        return true;
     }
 }
