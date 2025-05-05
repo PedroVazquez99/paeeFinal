@@ -6,10 +6,9 @@
              xmlns:local="clr-namespace:TPVproyecto.Views.Elegir"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <StackPanel Background="#FF53B76C">
-            <!-- Iterar sobre la lista de tipos y crear un botón por cada tipo -->
-            <ItemsControl ItemsSource="{Binding Tamanyos}">
+    <Grid Background="#FF53B76C" Margin="10">
+        <StackPanel>
+            <ItemsControl ItemsSource="{Binding TamanyosVisibles}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Content="{Binding NombreTamanyo}" 

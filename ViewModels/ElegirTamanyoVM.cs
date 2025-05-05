@@ -14,23 +14,18 @@ namespace TPVproyecto.ViewModels
 {
     public class ElegirTamanyoVM : BaseVM
     {
-        private readonly ElegirService _dataService;
-        public List<Tamanyo> Tamanyos { get; set; }
-        private readonly ElegirVM _mainViewModel;
-        public ICommand SeleccionarCommand { get; set; }
-        public ElegirTamanyoVM()
-        {
-            _dataService = new ElegirService();
-            Tamanyos = new List<Tamanyo>(_dataService.obtenerTamanyos());
+        public ElegirVM _mainViewModel; // Referencia al ViewModel padre
 
-        }
+        public ObservableCollection<Tamanyo> TamanyosVisibles => _mainViewModel.TamanyosVisibles; // Se obtiene desde el padre
+
+        public ICommand SeleccionarCommand { get; }
 
         public ElegirTamanyoVM(ElegirVM mainViewModel)
         {
             _mainViewModel = mainViewModel;
-            _dataService = new ElegirService();
-            Tamanyos = new List<Tamanyo>(_dataService.obtenerTamanyos());
-            SeleccionarCommand = new ElegirCommand(_mainViewModel); // COMANDO
+
+            // Mantiene la referencia a los datos paginados y la lógica de selección
+            SeleccionarCommand = new RelayCommand(obj => _mainViewModel.SeleccionarElemento(obj));
         }
     }
 }
