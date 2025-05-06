@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using TPVproyecto.Commands;
 using TPVproyecto.Helpers;
@@ -42,6 +43,7 @@ namespace TPVproyecto.ViewModels.PagPedidos
         public ICommand Siguiente { get; set; }
         public ICommand SeleccionarPedidoCommand { get; set; }
         public ICommand BorrarPedidoCommand { get; set; }
+        public ICommand BorrarLineaPedido { get; set; }
 
         private Pedido _pedidoSeleccionado;
         public Pedido PedidoSeleccionado
@@ -116,6 +118,10 @@ namespace TPVproyecto.ViewModels.PagPedidos
             BorrarPedidoCommand = new RelayCommand(
                 execute: EjecutarAbrirVentanaBorrarPedido,
                 canExecute: PuedeAbrirVentanaBorrarPedido
+            );
+
+            BorrarLineaPedido = new RelayCommand(
+                async parameter => await EliminarLineaPedido(Convert.ToInt32(parameter))
             );
 
         }
@@ -235,6 +241,38 @@ namespace TPVproyecto.ViewModels.PagPedidos
         {
             return helado.TamanyoH.Precio + helado.ToppingsH.PrecioPlus;
         }
+
+        public async Task EliminarLineaPedido(int idLineaPedido)
+        {
+            try
+            {
+                // Buscar la línea de pedido en la base de datos
+                var lineaPedido = LineasPedido.FirstOrDefault(lp => lp.ID == idLineaPedido);
+
+                if (lineaPedido != null)
+                {
+                    // Eliminar la línea de la base de datos
+                    _lineasPedidoService.EliminarLineaPedido(idLineaPedido);
+
+                    // Remover de la lista y actualizar la UI
+                    LineasPedido.Remove(lineaPedido);
+                    OnPropertyChanged(nameof(LineasPedido));
+
+                    // Recalcular el total del pedido
+                    PedidoSeleccionado.Total -= lineaPedido.Subtotal;
+                    OnPropertyChanged(nameof(PedidoSeleccionado));
+                }
+                else
+                {
+                    MessageBox.Show($"No se encontró la línea de pedido con ID {idLineaPedido}.", "Aviso");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al eliminar la línea de pedido: {ex.Message}", "Error");
+            }
+        }
+
 
 
     }

@@ -65,6 +65,7 @@
                         <TextBlock Text="{Binding Sabor.SaborNombre}" Margin="5"/>
                         <TextBlock Text="{Binding Topping.ToppingNombre}" Margin="5" />
                         <TextBlock Text="{Binding Subtotal}" Margin="5"/>
+                        <Button Content="Borrar" Command="{Binding DataContext.BorrarLineaPedido, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding ID}"></Button>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
