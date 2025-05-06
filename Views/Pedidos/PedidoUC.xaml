@@ -1,73 +1,109 @@
 ﻿<UserControl x:Class="TPVproyecto.Views.Pedidos.PedidoUC"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:TPVproyecto.Views.Pedidos"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="#FFC5C1C1">
+
+    <UserControl.Resources>
+        <!-- Estilos para botones -->
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+           
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <Border.Effect>
+                                <DropShadowEffect ShadowDepth="4" BlurRadius="10" Opacity="0.4"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#FFF5F5F5" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="5*"></RowDefinition>
-            <RowDefinition  Height="*"></RowDefinition>
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <ListBox ItemsSource="{Binding Helados}" Grid.Row="0">
+
+        <!-- Lista de helados -->
+        <ListBox ItemsSource="{Binding Helados}" Grid.Row="0" Margin="0,0,0,15">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <!-- Cada item del ListBox mostrará el Sabor y el Tipo del helado -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Id}" FontWeight="Bold" Margin="5" />
-                        <TextBlock Text="{Binding SaboresH.SaborNombre}" Margin="5" />
-                        <!--SABORES-->
-                        <ItemsControl ItemsSource="{Binding SaboresH}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <!-- Mostrar cada sabor en un TextBlock y poner un margen entre ellos -->
-                                    <TextBlock Text="{Binding SaborNombre}" Margin="5" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
+                    <Border Background="White" CornerRadius="10" BorderBrush="#FFDDDDDD" BorderThickness="1" Padding="12" Margin="6">
+                        <Grid Width="Auto" Height="60">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-                            <!-- Configurar la orientación horizontal -->
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
+                            <!-- Contenido del helado -->
+                            <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding TipoH.NombreTipo}" FontWeight="Bold" Margin="0,0,15,0"/>
+                                <TextBlock Text="{Binding TamanyoH.NombreTamanyo}" FontWeight="Bold" Margin="0,0,15,0"/>
+                                <TextBlock Text="{Binding SaboresH.SaborNombre}" FontWeight="Bold" Margin="0,0,15,0"/>
+                                <TextBlock Text="{Binding ToppingsH.ToppingNombre}" FontWeight="Bold" Margin="0,0,15,0"/>
+                            </StackPanel>
 
-
-                        <Button Content="Detalles" Margin="5" />
-                        <Button Content="Borrar"
-                        Command="{Binding DataContext.BorrarHeladoCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"
-                        Margin="5" />
-                    </StackPanel>
+                            <!-- Botón Borrar alineado a la derecha -->
+                            <Button Content="Borrar"
+                    Grid.Column="1"
+                    Command="{Binding DataContext.BorrarHeladoCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"
+                    Style="{StaticResource ActionButtonStyle}"
+                    Background="#FFFF6060"
+                    Foreground="White"
+                    VerticalAlignment="Center"
+                    Margin="10,0,0,0"/>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
 
-            <!--Precio Pedido-->
-            <TextBlock Text="{Binding Total, StringFormat='{}{0:0.00} €'}" Width="Auto" FontSize="36" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,20,0"/>
-            
-            <!--Boton RESET-->
-            <Button Height="40" Width="100"
-                Content="Limpiar"
-                Command="{Binding ResetCommand}"
-                Background="#FFFF6060" Foreground="White" Margin="0,0,10,0" Grid.Row="1"/>
-            
-            <!--Boton MESA-->
-            <Button Height="40" Width="100" 
-                    Content="Mesa" 
+        <!-- Panel inferior -->
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <!-- Precio Total -->
+            <TextBlock Text="{Binding Total, StringFormat='{}{0:0.00} €'}"
+                       FontSize="36"
+                       FontWeight="Bold"
+                       Foreground="#FF444444"
+                       VerticalAlignment="Center"/>
+
+            <!-- Botones de acción -->
+            <Button Content="Limpiar"
+                    Command="{Binding ResetCommand}"
+                    Style="{StaticResource ActionButtonStyle}"
+                    Background="#FFFF6060"
+                    Foreground="White"
+                    Margin="10"/>
+
+            <Button Content="Mesa"
                     Command="{Binding MesaSelectCommand}"
-                   />
-            
-            <!--Boton Pagar-->
-            <Button Height="40" Width="100" 
-                    Content="Pagar" 
-                    Command="{Binding PagarSelectCommand}" Margin="10,0,10,0" 
-                    />
+                    Style="{StaticResource ActionButtonStyle}"
+                    Background="#FF4CAF50"
+                    Foreground="White"
+                    Margin="10"/>
 
+            <Button Content="Pagar"
+                    Command="{Binding PagarSelectCommand}"
+                    Style="{StaticResource ActionButtonStyle}"
+                    Background="#FF2196F3"
+                    Foreground="White"
+                    Margin="10"/>
         </StackPanel>
     </Grid>
 </UserControl>
