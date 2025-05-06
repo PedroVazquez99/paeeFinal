@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using TPVproyecto.Commands;
 using TPVproyecto.Commands.AdminModal;
 using TPVproyecto.Models;
 using TPVproyecto.Services;
@@ -13,10 +11,26 @@ namespace TPVproyecto.ViewModels.Admin
 {
     public class SaborHAdminVM : BaseVM
     {
+        private int _paginaActual = 1;
+        private const int ElementosPorPagina = 5;
+
+        public int PaginaActual
+        {
+            get => _paginaActual;
+            set
+            {
+                if (_paginaActual != value)
+                {
+                    _paginaActual = value;
+                    OnPropertyChanged(nameof(PaginaActual));
+                    OnPropertyChanged(nameof(SaboresVisibles));
+                }
+            }
+        }
+
+        public int TotalPaginas => (Sabores.Count + ElementosPorPagina - 1) / ElementosPorPagina;
+
         private ObservableCollection<Sabor> _sabores;
-
-        private Sabor _saborSeleccionado;
-
         public ObservableCollection<Sabor> Sabores
         {
             get => _sabores;
@@ -24,22 +38,36 @@ namespace TPVproyecto.ViewModels.Admin
             {
                 _sabores = value;
                 OnPropertyChanged(nameof(Sabores));
+                OnPropertyChanged(nameof(SaboresVisibles));
+                OnPropertyChanged(nameof(TotalPaginas));
             }
         }
 
-        //Comandos
-        public ICommand ModalEditarCommand { get; set; }
+        public ObservableCollection<Sabor> SaboresVisibles =>
+            new ObservableCollection<Sabor>(
+                Sabores.Skip((PaginaActual - 1) * ElementosPorPagina).Take(ElementosPorPagina)
+            );
 
-        //Servicio
+        public ICommand ModalEditarCommand { get; }
+        public ICommand CambiarPaginaCommand { get; }
+
         private ElegirService _elegirService;
 
         public SaborHAdminVM()
         {
             _elegirService = new ElegirService();
-            _sabores = new ObservableCollection<Sabor>(_elegirService.obtenerSabores());
+            Sabores = new ObservableCollection<Sabor>(_elegirService.obtenerSabores());
 
-            ModalEditarCommand = new EditarSaborModalCommand(); // Cambiar por el modal de Tamanyos
+            ModalEditarCommand = new EditarSaborModalCommand();
+
+            CambiarPaginaCommand = new RelayCommand(param =>
+            {
+                int nuevaPagina = PaginaActual + Convert.ToInt32(param);
+                if (nuevaPagina > 0 && nuevaPagina <= TotalPaginas)
+                {
+                    PaginaActual = nuevaPagina;
+                }
+            });
         }
-
     }
 }

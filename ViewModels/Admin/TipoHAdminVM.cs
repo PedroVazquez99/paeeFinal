@@ -14,34 +14,44 @@ namespace TPVproyecto.ViewModels.Admin
 {
     public class TipoHAdminVM : BaseVM
     {
+        private int _paginaActual = 1;
+        private const int ElementosPorPagina = 5;
 
-        private ObservableCollection<Tipo> _tipos;
-
-        private Tipo _tipoSeleccionado;
-
-        public ObservableCollection<Tipo> Tipos {
-            get => _tipos;
-            set 
+        public int PaginaActual
+        {
+            get => _paginaActual;
+            set
             {
-                _tipos = value;
-                OnPropertyChanged(nameof(Tipos));
-            }    
+                _paginaActual = value;
+                OnPropertyChanged(nameof(PaginaActual));
+                OnPropertyChanged(nameof(TiposVisibles));
+            }
         }
 
-        //Comandos
-        public ICommand ModalEditarCommand { get; set; }
+        public ObservableCollection<Tipo> Tipos { get; set; }
 
-        //Servicio
-        private ElegirService _elegirService;
+        public ObservableCollection<Tipo> TiposVisibles
+            => new ObservableCollection<Tipo>(Tipos.Skip((PaginaActual - 1) * ElementosPorPagina).Take(ElementosPorPagina));
 
-        public TipoHAdminVM() {
+        public ICommand CambiarPaginaCommand { get; }
+        public ICommand ModalEditarCommand {  get; }
+
+        ElegirService _elegirService;
+
+        public TipoHAdminVM()
+        {
             _elegirService = new ElegirService();
-            _tipos = new ObservableCollection<Tipo>(_elegirService.obtenerTipos());
-
+            Tipos = new ObservableCollection<Tipo>(_elegirService.obtenerTipos());
             ModalEditarCommand = new EditarTipoModalCommand();
+
+            CambiarPaginaCommand = new RelayCommand(param =>
+            {
+                int nuevaPagina = PaginaActual + Convert.ToInt32(param);
+                if (nuevaPagina > 0 && nuevaPagina <= (Tipos.Count + ElementosPorPagina - 1) / ElementosPorPagina)
+                {
+                    PaginaActual = nuevaPagina;
+                }
+            });
         }
-
-
-
     }
 }
