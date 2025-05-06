@@ -4,16 +4,79 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TPVproyecto.Views.Ventanas"
+        xmlns:mpvk="http://schemas.mpcoding.com/mpcoding/wpf/virtualkeys"
         mc:Ignorable="d"
-        Title="PagarWindow" Height="450" Width="800"
-        xmlns:mpvk="http://schemas.mpcoding.com/mpcoding/wpf/virtualkeys">
-    <Grid>
-        <TextBlock Text="A pagar: " FontSize="30" Margin="192,46,466,335"></TextBlock>
-        <TextBlock Text="{Binding Total}" FontSize="30" Margin="400,46,258,335"></TextBlock>
-        <TextBlock Text="Cambio: " FontSize="30" Margin="192,116,466,265"></TextBlock>
-        <TextBlock Text="{Binding Cambio}" FontSize="30" Margin="367,116,291,265"></TextBlock>
-        <TextBox mpvk:VirtualKeyboard.KeyboardWidth="600" mpvk:VirtualKeyPad.Mode="TouchAndMouse" Height="50" Width="200" Text="{Binding TextoPad}" Margin="234,247,366,137"/>
-        <Button Command="{Binding DataContext.PagoCash, RelativeSource={RelativeSource AncestorType=Window}}"
-                Width="100" Height="50" Margin="472,247,228,137" >Aceptar</Button>
+        Title="Pagar"
+        Height="450"
+        Width="800"
+        Background="#FFF5F5F5">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Monto a pagar -->
+        <TextBlock Text="A pagar:"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center"
+                   Grid.Row="0" Grid.Column="0"
+                   Margin="0,10,0,10"/>
+
+        <TextBlock Text="{Binding Total}"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center"
+                   Grid.Row="0" Grid.Column="1"
+                   Margin="0,10,0,10"/>
+
+        <!-- Cambio a devolver -->
+        <TextBlock Text="Cambio:"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center"
+                   Grid.Row="1" Grid.Column="0"
+                   Margin="0,10,0,10"/>
+
+        <TextBlock Text="{Binding Cambio}"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center"
+                   Grid.Row="1" Grid.Column="1"
+                   Margin="0,10,0,10"/>
+
+        <!-- Input con teclado virtual -->
+        <TextBox Text="{Binding TextoPad}"
+                 Height="50"
+                 VerticalAlignment="Center"
+                 Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                 mpvk:VirtualKeyboard.KeyboardWidth="600"
+                 mpvk:VirtualKeyPad.Mode="TouchAndMouse"
+                 Margin="0,20,0,20"
+                 FontSize="20"
+                 Padding="10"
+                 BorderBrush="Gray"
+                 BorderThickness="1"/>
+
+        <!-- Botón de aceptación -->
+        <Button Content="Aceptar"
+                Width="120"
+                Height="50"
+                VerticalAlignment="Center"
+                Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                Command="{Binding DataContext.PagoCash, RelativeSource={RelativeSource AncestorType=Window}}"
+                Background="#FF007ACC"
+                Foreground="White"
+                FontSize="18"
+                Margin="0,20,0,0"/>
     </Grid>
 </Window>

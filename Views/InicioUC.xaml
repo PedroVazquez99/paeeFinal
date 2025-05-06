@@ -45,10 +45,48 @@
         <!--<ucE:SaborUC Grid.Row="0" Grid.Column="1" Margin="10,10,10,10" ></ucE:SaborUC>-->
         <ucE:ElegirUC DataContext="{Binding ElegirVM_Main}" Grid.Row="0" Grid.Column="1" Margin="10,10,10,10" ></ucE:ElegirUC>
 
-        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="10,10,10,10" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Administración" Height="100" Width="100" Margin="20,0,20,0" Command="{Binding AdminCommand}" CommandParameter="Admin"/>
-            <Button Content="Cuentas" Height="100" Width="100" Margin="20,0,20,0" Command="{Binding CuentasCommand}" CommandParameter="Cuentas"/>
-            <Button Content="Salir" Height="100" Width="100" Margin="20,0,20,0" Command="{Binding AdminCommand}" CommandParameter="Admin"/>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel.Resources>
+                <!-- Define a style for buttons -->
+                <Style x:Key="ModernButtonStyle" TargetType="Button">
+                    <Setter Property="Background" Value="#FF4CAF50"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="Height" Value="100"/>
+                    <Setter Property="Width" Value="100"/>
+                    <Setter Property="Margin" Value="20,0,20,0"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="FontFamily" Value="Segoe UI"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="15">
+                                    <Border.Effect>
+                                        <DropShadowEffect ShadowDepth="2" BlurRadius="5" Opacity="0.3"/>
+                                    </Border.Effect>
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#FF45A049"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#FF66BB6A"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Resources>
+
+            <Button Content="Administración" Style="{StaticResource ModernButtonStyle}" Command="{Binding AdminCommand}" CommandParameter="Admin" Width="150"/>
+            <Button Content="Cuentas" Style="{StaticResource ModernButtonStyle}" Command="{Binding CuentasCommand}" CommandParameter="Cuentas" Width="150"/>
+            <Button Content="Salir" Style="{StaticResource ModernButtonStyle}" Command="{Binding AdminCommand}" CommandParameter="Admin" Width="150"/>
         </StackPanel>
+
     </Grid>
 </UserControl>
