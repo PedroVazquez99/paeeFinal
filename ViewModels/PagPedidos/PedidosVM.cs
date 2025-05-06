@@ -45,6 +45,7 @@ namespace TPVproyecto.ViewModels.PagPedidos
         public ICommand BorrarPedidoCommand { get; set; }
         public ICommand BorrarLineaPedido { get; set; }
         public ICommand TicketCommand { get; set; }
+        public ICommand VolverCommand { get; set; }
 
         private Pedido _pedidoSeleccionado;
         public Pedido PedidoSeleccionado
@@ -89,6 +90,8 @@ namespace TPVproyecto.ViewModels.PagPedidos
             _pedidoService = new PedidosService();
             _documentosPDFHelper = new DocumentosPDFHelper();
             _lineasPedidoService = new LineasPedidoService();
+
+            VolverCommand = new VolverCommand(navigationStore); // Boton de Volver (Atras)
 
             PaginacionHelper = new PaginacionHelper<Pedido>(new ObservableCollection<Pedido>(_pedidoService.ObtenerPedidos()), 6);
             _pedidos = new ObservableCollection<Pedido>(PaginacionHelper.getPaginaActualElementos());
