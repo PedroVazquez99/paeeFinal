@@ -1,122 +1,93 @@
-﻿using MigraDoc.DocumentObjectModel.Tables;
-using MigraDoc.DocumentObjectModel;
+﻿using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
-using PdfSharp.Fonts;
 using PdfSharp.Pdf;
-using PdfSharp.Snippets.Font;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TPVproyecto.Models.Pedido;
 
 namespace TPVproyecto.Helpers
 {
     public class DocumentosPDFHelper
     {
+        public static void GenerarTicketPDF(Pedido pedido, string rutaDestino)
+        {
+            // Create document and section
+            Document doc = new Document();
+            Section section = doc.AddSection();
 
-        //public bool SavePDF(List<Provincia> provincias, string path)
-        //{
-        //    try
-        //    {
-        //        if (PdfSharp.Capabilities.Build.IsCoreBuild)
-        //            GlobalFontSettings.FontResolver = new FailsafeFontResolver();
+            // Configure ticket size
+            section.PageSetup.PageWidth = Unit.FromCentimeter(8);
+            section.PageSetup.PageHeight = Unit.FromCentimeter(20); // Adjust height as needed
+            section.PageSetup.LeftMargin = Unit.FromCentimeter(0.5);
+            section.PageSetup.RightMargin = Unit.FromCentimeter(0.5);
+            section.PageSetup.TopMargin = Unit.FromCentimeter(0.5);
+            section.PageSetup.BottomMargin = Unit.FromCentimeter(0.5);
 
-        //        Document document = new Document(); // Se crea el Documento
-        //        Section section = document.AddSection();
-        //        Paragraph paragraph = section.AddParagraph();
-        //        paragraph.AddText("Provincias"); // Encabezado
-        //        paragraph.Format.Font.Size = 20;
-        //        paragraph.Format.Font.Bold = true;
-        //        paragraph.Format.Alignment = ParagraphAlignment.Center;
+            string fuente = "Verdana";
 
-        //        section.AddParagraph();
+            // Header
+            Paragraph encabezado = section.AddParagraph("CAFETERÍA AZUL", "Header");
+            encabezado.Format.Font.Size = 12;
+            encabezado.Format.Font.Bold = true;
+            encabezado.Format.Alignment = ParagraphAlignment.Center;
+            encabezado.Format.SpaceAfter = "0.3cm";
 
-        //        // Se agrega el formato tabla al documento
-        //        Table table = section.AddTable();
-        //        table.Style = "Table";
+            // Order Info
+            AddInfoLine(section, $"Pedido: #{pedido.ID_Pedido}", fuente);
+            AddInfoLine(section, $"Mesa: {pedido.Mesa?.NombreMesa}", fuente);
+            AddInfoLine(section, $"Fecha: {DateTime.Now:g}", fuente);
+            AddDivider(section, fuente);
 
-        //        // Columna ID
-        //        Column column = table.AddColumn("2cm");
-        //        column.Format.Alignment = ParagraphAlignment.Center;
+            // Order Details
+            foreach (var linea in pedido.LineasPedido)
+            {
+                string texto = $"1 x {linea.Tipo?.NombreTipo} - {linea.Tamanyo?.NombreTamanyo}";
 
-        //        // Columna Provincia
-        //        column = table.AddColumn("3cm");
-        //        column.Format.Alignment = ParagraphAlignment.Left;
+                if (!string.IsNullOrWhiteSpace(linea.Sabor?.SaborNombre))
+                    texto += $" ({linea.Sabor.SaborNombre})";
 
-        //        // Columna Poblacion
-        //        column = table.AddColumn("3cm");
-        //        column.Format.Alignment = ParagraphAlignment.Left;
+                if (!string.IsNullOrWhiteSpace(linea.Topping?.ToppingNombre))
+                    texto += $" + {linea.Topping.ToppingNombre}";
 
-        //        // Columna Superficie
-        //        column = table.AddColumn("3cm");
-        //        column.Format.Alignment = ParagraphAlignment.Left;
+                AddInfoLine(section, texto, fuente);
 
-        //        //  Columna Gentilicio
-        //        column = table.AddColumn("3cm");
-        //        column.Format.Alignment = ParagraphAlignment.Left;
+                Paragraph pSubtotal = section.AddParagraph($"Subtotal: {linea.Subtotal:C2}", "Subtotal");
+                pSubtotal.Format.Alignment = ParagraphAlignment.Right;
+            }
 
-        //        // Columna Escudo
-        //        column = table.AddColumn("3cm");
-        //        column.Format.Alignment = ParagraphAlignment.Left;
+            AddDivider(section, fuente);
 
-        //        Row row = table.AddRow();
-        //        row.HeadingFormat = true;
+            // Total
+            Paragraph pTotal = section.AddParagraph($"TOTAL: {pedido.Total:C2}", "Total");
+            pTotal.Format.Font.Size = 11;
+            pTotal.Format.Font.Bold = true;
+            pTotal.Format.Alignment = ParagraphAlignment.Right;
 
-        //        row.Format.Font.Bold = true;
-        //        row.Shading.Color = Colors.LightBlue;
-        //        row.Cells[0].AddParagraph("ID").Format.Alignment = ParagraphAlignment.Center;
-        //        row.Cells[1].AddParagraph("Provincia");
-        //        row.Cells[2].AddParagraph("Poblacion");
-        //        row.Cells[3].AddParagraph("Superficie");
-        //        row.Cells[4].AddParagraph("Gentilicio");
-        //        row.Cells[5].AddParagraph("Escudo");
+            // Render and save PDF
+            PdfDocumentRenderer renderer = new PdfDocumentRenderer(true)
+            {
+                Document = doc,
+                PdfDocument = new PdfDocument()
+            };
 
-        //        int index = 0;
+            renderer.RenderDocument();
+            renderer.PdfDocument.Save(rutaDestino);
+        }
 
-        //        string imageDomain = AppDomain.CurrentDomain.BaseDirectory;
+        private static void AddInfoLine(Section section, string text, string font)
+        {
+            Paragraph p = section.AddParagraph(text, "InfoLine");
+            p.Format.Font.Name = font;
+            p.Format.Font.Size = 10;
+        }
 
-        //        MigraDoc.DocumentObjectModel.Shapes.Image img = new MigraDoc.DocumentObjectModel.Shapes.Image();
-
-        //        foreach (Provincia p in provincias)
-        //        {
-        //            if (index % 2 == 0 && index != 0)
-        //            {
-        //                row.Shading.Color = Colors.AntiqueWhite;
-        //            }
-        //            row = table.AddRow();
-        //            row.Cells[0].AddParagraph(p.ID.ToString()).Format.Alignment = ParagraphAlignment.Center;
-        //            row.Cells[1].AddParagraph(p.Nombre);
-        //            row.Cells[2].AddParagraph(p.Poblacion);
-        //            row.Cells[3].AddParagraph(p.Superficie);
-        //            row.Cells[4].AddParagraph(p.Gentilicio);
-
-        //            // Construye la ruta completa del archivo en la carpeta Assets del proyecto principal
-        //            string assetPath = System.IO.Path.Combine(imageDomain, "assets", p.Src.ToString() + ".png");
-
-        //            img = row.Cells[5].AddImage(assetPath);
-
-        //            img.Width = Unit.FromCentimeter(1);  // Ajusta el ancho a 2 cm
-        //            img.Height = Unit.FromCentimeter(1); // Ajusta el alto a 2 cm
-
-
-        //            index++;
-        //        }
-
-        //        PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer
-        //        {
-        //            Document = document,
-        //            PdfDocument = new PdfDocument()
-        //        };
-        //        pdfRenderer.RenderDocument();
-        //        pdfRenderer.PdfDocument.Save(path);
-        //        return true;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return false;
-        //    }
-        //}
-
+        private static void AddDivider(Section section, string font)
+        {
+            Paragraph p = section.AddParagraph(new string('-', 32), "Divider");
+            p.Format.Font.Name = font;
+            p.Format.Font.Size = 10;
+            p.Format.SpaceBefore = "0.2cm";
+            p.Format.SpaceAfter = "0.2cm";
+        }
     }
 }

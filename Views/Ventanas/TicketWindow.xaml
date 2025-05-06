@@ -1,0 +1,19 @@
+﻿<Window x:Class="TPVproyecto.Views.Ventanas.TicketWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TPVproyecto.Views.Ventanas"
+        mc:Ignorable="d"
+        Title="TicketWindow" Height="450" Width="800"
+        >
+    <Grid>
+        <!-- Botón para cargar el PDF -->
+        <Button Content="Cargar Ticket" Command="{Binding CargarPdfCommand}" CommandParameter="ruta/del/archivo.pdf"
+                HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10"/>
+
+        <!-- Mostrar la ruta del PDF cargado -->
+        <TextBlock Text="{Binding PdfFilePath}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" />
+
+    </Grid>
+</Window>

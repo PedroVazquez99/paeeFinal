@@ -44,6 +44,7 @@ namespace TPVproyecto.ViewModels.PagPedidos
         public ICommand SeleccionarPedidoCommand { get; set; }
         public ICommand BorrarPedidoCommand { get; set; }
         public ICommand BorrarLineaPedido { get; set; }
+        public ICommand TicketCommand { get; set; }
 
         private Pedido _pedidoSeleccionado;
         public Pedido PedidoSeleccionado
@@ -79,11 +80,14 @@ namespace TPVproyecto.ViewModels.PagPedidos
             }
         }
 
+        DocumentosPDFHelper _documentosPDFHelper;
+
         public PedidosVM(NavigationStore navigationStore, InicioVM inicioVM)
         {
             _navigationStore = navigationStore;
             _heladoService = new HeladoService();
             _pedidoService = new PedidosService();
+            _documentosPDFHelper = new DocumentosPDFHelper();
             _lineasPedidoService = new LineasPedidoService();
 
             PaginacionHelper = new PaginacionHelper<Pedido>(new ObservableCollection<Pedido>(_pedidoService.ObtenerPedidos()), 6);
@@ -123,6 +127,8 @@ namespace TPVproyecto.ViewModels.PagPedidos
             BorrarLineaPedido = new RelayCommand(
                 async parameter => await EliminarLineaPedido(Convert.ToInt32(parameter))
             );
+
+            TicketCommand = new RelayCommand(EjecutarAbrirVentanaTicket, PuedeAbrirVentanaTicket);
 
         }
 
@@ -273,7 +279,16 @@ namespace TPVproyecto.ViewModels.PagPedidos
             }
         }
 
+        private void EjecutarAbrirVentanaTicket(object parameter)
+        {
+            var ticketWindow = new TicketWindow(PedidoSeleccionado);
+            ticketWindow.Show();
+        }
 
+        private bool PuedeAbrirVentanaTicket(object parameter)
+        {
+            return true; // Solo permite abrir si hay un pedido seleccionado
 
+        }
     }
 }

@@ -30,26 +30,41 @@
                  Background="#E6F2FA" BorderBrush="#007ACC" Foreground="#1F2D3D"/>
 
         <!-- Pedidos -->
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0 0 10 0">
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0 20 10 0">
+            <TextBlock Text="Pedidos" FontSize="24" HorizontalAlignment="Center"></TextBlock>
             <ListBox ItemsSource="{Binding Pedidos}"
-                     SelectedItem="{Binding PedidoSeleccionado, Mode=TwoWay}"
-                     Background="#E6F2FA"
-                     BorderBrush="#007ACC"
-                     Foreground="#1F2D3D">
+         SelectedItem="{Binding PedidoSeleccionado, Mode=TwoWay}"
+         Background="#E6F2FA"
+         BorderBrush="#007ACC"
+         Foreground="#1F2D3D"
+         HorizontalContentAlignment="Stretch">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border BorderBrush="#007ACC" BorderThickness="1" Margin="5" Padding="5" CornerRadius="5">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Pedido #" FontWeight="Bold" Margin="0,0,5,0"/>
-                                <TextBlock Text="{Binding ID_Pedido}" FontWeight="Bold" Margin="0,0,10,0"/>
-                                <TextBlock Text="{Binding Mesa.NombreMesa}" Margin="0,0,10,0"/>
-                                <TextBlock Text="{Binding Total, StringFormat=C}" Margin="0,0,10,0"/>
-                                <Button Content="Borrar" 
-                                        Command="{Binding DataContext.BorrarPedidoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                        Background="#007ACC" Foreground="White"
-                                        Padding="5,2" Margin="5,0"
-                                        BorderThickness="0" FontWeight="Bold"/>
-                            </StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="{Binding ID_Pedido}" FontWeight="Bold" Margin="5" />
+                                <TextBlock Grid.Column="1" Text="{Binding Mesa.NombreMesa}" Margin="5" />
+                                <TextBlock Grid.Column="2" Text="{Binding Total, StringFormat=C}" Margin="5" />
+                                <Button Grid.Column="3" Content="Ticket"
+                                    Command="{Binding DataContext.TicketCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    Background="#007ACC" Foreground="White"
+                                    Padding="5,2" Margin="5,0"
+                                    BorderThickness="0" FontWeight="Bold"/>
+
+                                <Button Grid.Column="4" Content="Borrar"
+                                    Command="{Binding DataContext.BorrarPedidoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    Background="#e84f4a" Foreground="White"
+                                    Padding="5,2" Margin="5,0"
+                                    BorderThickness="0" FontWeight="Bold"/>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -71,21 +86,32 @@
 
         <!-- Líneas de pedido -->
         <ListBox ItemsSource="{Binding LineasPedido}" Grid.Row="3" Grid.ColumnSpan="2"
-                 Background="#E6F2FA" BorderBrush="#007ACC" Foreground="#1F2D3D" Margin="0,10,0,0">
+         Background="#E6F2FA" BorderBrush="#007ACC" Foreground="#1F2D3D"
+         Margin="0,10,0,0" HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="#007ACC" BorderThickness="1" Margin="5" Padding="5" CornerRadius="5">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding Tipo.NombreTipo}" Margin="5"/>
-                            <TextBlock Text="{Binding Tamanyo.NombreTamanyo}" Margin="5"/>
-                            <TextBlock Text="{Binding Sabor.SaborNombre}" Margin="5"/>
-                            <TextBlock Text="{Binding Topping.ToppingNombre}" Margin="5"/>
-                            <TextBlock Text="{Binding Subtotal, StringFormat=C}" Margin="5"/>
-                            <Button Content="Borrar" 
-                                    Command="{Binding DataContext.BorrarLineaPedido, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                    CommandParameter="{Binding ID}"
-                                    Background="#007ACC" Foreground="White" Margin="5" Padding="5,2" BorderThickness="0"/>
-                        </StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="{Binding Tipo.NombreTipo}" Margin="5"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Tamanyo.NombreTamanyo}" Margin="5"/>
+                            <TextBlock Grid.Column="2" Text="{Binding Sabor.SaborNombre}" Margin="5"/>
+                            <TextBlock Grid.Column="3" Text="{Binding Topping.ToppingNombre}" Margin="5"/>
+                            <TextBlock Grid.Column="4" Text="{Binding Subtotal, StringFormat=C}" Margin="5"/>
+                            <Button Grid.Column="5" Content="Borrar"
+                            Command="{Binding DataContext.BorrarLineaPedido, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            CommandParameter="{Binding ID}"
+                            Background="#e84f4a" Foreground="White"
+                            Margin="5" Padding="5,2" BorderThickness="0"/>
+                        </Grid>
                     </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
