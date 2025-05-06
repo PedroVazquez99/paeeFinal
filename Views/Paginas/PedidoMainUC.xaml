@@ -6,67 +6,87 @@
              xmlns:local="clr-namespace:TPVproyecto.Views.Paginas"
              xmlns:ucE="clr-namespace:TPVproyecto.Views.Elegir"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="White">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="#F0F8FF">
 
-
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="5*"/>
-            <!-- SE DIVIDE EN 2 COLUMNAS -->
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="3*"/>
-            <!-- LÍNEAS DE PEDIDO QUEDAN IGUAL -->
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
-            <!-- Área de Pedidos -->
             <ColumnDefinition Width="2*"/>
-            <!-- Componente externo -->
         </Grid.ColumnDefinitions>
 
-        <!-- Campo de búsqueda -->
-        <TextBox Text="{Binding SearchQuery}" Grid.Row="0" Grid.ColumnSpan="2"/>
+        <!-- Búsqueda -->
+        <TextBox Text="{Binding SearchQuery}"
+                 Grid.Row="0" Grid.ColumnSpan="2"
+                 Margin="0 0 0 10"
+                 FontSize="16" Padding="8"
+                 Background="#E6F2FA" BorderBrush="#007ACC" Foreground="#1F2D3D"/>
 
-        <!-- LISTA DE PEDIDOS (IZQUIERDA) -->
-        <StackPanel Grid.Row="1" Grid.Column="0">
+        <!-- Pedidos -->
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0 0 10 0">
             <ListBox ItemsSource="{Binding Pedidos}"
-                     SelectedItem="{Binding PedidoSeleccionado, Mode=TwoWay}">
+                     SelectedItem="{Binding PedidoSeleccionado, Mode=TwoWay}"
+                     Background="#E6F2FA"
+                     BorderBrush="#007ACC"
+                     Foreground="#1F2D3D">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding ID_Pedido}" FontWeight="Bold" Margin="5" />
-                            <TextBlock Text="{Binding Mesa.NombreMesa}" Margin="5" />
-                            <TextBlock Text="{Binding Total}" Margin="5" />
-                            <Button Content="Borrar" Margin="5" Command="{Binding DataContext.BorrarPedidoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-                        </StackPanel>
+                        <Border BorderBrush="#007ACC" BorderThickness="1" Margin="5" Padding="5" CornerRadius="5">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Pedido #" FontWeight="Bold" Margin="0,0,5,0"/>
+                                <TextBlock Text="{Binding ID_Pedido}" FontWeight="Bold" Margin="0,0,10,0"/>
+                                <TextBlock Text="{Binding Mesa.NombreMesa}" Margin="0,0,10,0"/>
+                                <TextBlock Text="{Binding Total, StringFormat=C}" Margin="0,0,10,0"/>
+                                <Button Content="Borrar" 
+                                        Command="{Binding DataContext.BorrarPedidoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                        Background="#007ACC" Foreground="White"
+                                        Padding="5,2" Margin="5,0"
+                                        BorderThickness="0" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <!-- Botones de paginación -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Anterior" Command="{Binding Anterior}" Width="100"/>
-                <Button Content="Siguiente" Command="{Binding Siguiente}" Width="100"/>
+            <!-- Paginación -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Button Content="◀ Anterior" Command="{Binding Anterior}" Width="100"
+                        Background="#007ACC" Foreground="White" BorderThickness="0" Margin="5" Padding="5"/>
+                <Button Content="Siguiente ▶" Command="{Binding Siguiente}" Width="100"
+                        Background="#007ACC" Foreground="White" BorderThickness="0" Margin="5" Padding="5"/>
             </StackPanel>
         </StackPanel>
 
-        <!-- ÁREA DEL COMPONENTE (DERECHA) -->
-        <ucE:ElegirUC DataContext="{Binding ElegirVM_Main}" Grid.Row="1" Grid.Column="1"  Margin="10,10,10,10" ></ucE:ElegirUC>
+        <!-- ElegirUC -->
+        <ucE:ElegirUC DataContext="{Binding ElegirVM_Main}" 
+                      Grid.Row="1" Grid.Column="1"
+                      Margin="10" />
 
-        <!-- LÍNEAS DE PEDIDO (SE MANTIENE IGUAL) -->
-        <ListBox ItemsSource="{Binding LineasPedido}" Grid.Row="3">
+        <!-- Líneas de pedido -->
+        <ListBox ItemsSource="{Binding LineasPedido}" Grid.Row="3" Grid.ColumnSpan="2"
+                 Background="#E6F2FA" BorderBrush="#007ACC" Foreground="#1F2D3D" Margin="0,10,0,0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Tipo.NombreTipo}" Margin="5"/>
-                        <TextBlock Text="{Binding Tamanyo.NombreTamanyo}" Margin="5"/>
-                        <TextBlock Text="{Binding Sabor.SaborNombre}" Margin="5"/>
-                        <TextBlock Text="{Binding Topping.ToppingNombre}" Margin="5" />
-                        <TextBlock Text="{Binding Subtotal}" Margin="5"/>
-                        <Button Content="Borrar" Command="{Binding DataContext.BorrarLineaPedido, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding ID}"></Button>
-                    </StackPanel>
+                    <Border BorderBrush="#007ACC" BorderThickness="1" Margin="5" Padding="5" CornerRadius="5">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Tipo.NombreTipo}" Margin="5"/>
+                            <TextBlock Text="{Binding Tamanyo.NombreTamanyo}" Margin="5"/>
+                            <TextBlock Text="{Binding Sabor.SaborNombre}" Margin="5"/>
+                            <TextBlock Text="{Binding Topping.ToppingNombre}" Margin="5"/>
+                            <TextBlock Text="{Binding Subtotal, StringFormat=C}" Margin="5"/>
+                            <Button Content="Borrar" 
+                                    Command="{Binding DataContext.BorrarLineaPedido, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                    CommandParameter="{Binding ID}"
+                                    Background="#007ACC" Foreground="White" Margin="5" Padding="5,2" BorderThickness="0"/>
+                        </StackPanel>
+                    </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
