@@ -54,7 +54,7 @@
 
                                 <TextBlock Grid.Column="0" Text="{Binding ID_Pedido}" FontWeight="Bold" Margin="5" />
                                 <TextBlock Grid.Column="1" Text="{Binding Mesa.NombreMesa}" Margin="5" />
-                                <TextBlock Grid.Column="2" Text="{Binding Total, StringFormat=C}" Margin="5" />
+                                <TextBlock Grid.Column="2" Text="{Binding Total, StringFormat={}{0:C}, ConverterCulture='es-ES'}" Margin="5" />
                                 <Button Grid.Column="3" Content="Ticket"
                                     Command="{Binding DataContext.TicketCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                     Background="#007ACC" Foreground="White"
@@ -108,7 +108,7 @@
                             <TextBlock Grid.Column="1" Text="{Binding Tamanyo.NombreTamanyo}" Margin="5"/>
                             <TextBlock Grid.Column="2" Text="{Binding Sabor.SaborNombre}" Margin="5"/>
                             <TextBlock Grid.Column="3" Text="{Binding Topping.ToppingNombre}" Margin="5"/>
-                            <TextBlock Grid.Column="4" Text="{Binding Subtotal, StringFormat=C}" Margin="5"/>
+                            <TextBlock Grid.Column="4" Text="{Binding Subtotal, StringFormat={}{0:C}, ConverterCulture='es-ES'}" Margin="5" />
                             <Button Grid.Column="5" Content="Borrar"
                             Command="{Binding DataContext.BorrarLineaPedido, RelativeSource={RelativeSource AncestorType=UserControl}}"
                             CommandParameter="{Binding ID}"
